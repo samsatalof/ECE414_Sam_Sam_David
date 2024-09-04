@@ -12,5 +12,9 @@ void sw_in_init() {
 }
 
 bool sw_in_read1() {
+    digitalRead(17);
+}
 
+bool sw_in_read2() {
+    digitalRead(16);
 }
