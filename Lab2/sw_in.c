@@ -8,8 +8,8 @@ void sw_in_init() {
     volatile uint32_t *pad16 = (PADCTL_GPIO16);
     volatile uint32_t *pad17 = (PADCTL_GPIO17);
 
-    *pad16 = 0x00000044;
-    *pad17 = 0x00000044;
+    *pad16 |= 0x00000044;
+    *pad17 |= 0x00000044;
 }
 
 bool sw_in_read1() {
