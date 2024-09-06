@@ -2,6 +2,7 @@
 #define LED_OUT_H
 
 #include "pico/stdlib.h"
+#include <stdbool.h>
 
 void led_out_init();
 
