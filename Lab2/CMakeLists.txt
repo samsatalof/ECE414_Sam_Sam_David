@@ -11,7 +11,7 @@ add_executable(Lab2
         )
 
 # pull in common dependencies
-target_link_libraries(Lab2 pico_stdlib pico_bootsel_via_double_reset)
+target_link_libraries(Lab2 pico_stdlib pico_bootsel_via_double_reset pads_bank0)
 
 # create map/bin/hex file etc.
 pico_add_extra_outputs(Lab2)
