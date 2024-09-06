@@ -2,6 +2,7 @@
 #define SW_IN_H
 
 #include "pico/stdlib.h"
+#include <stdint.h>
 #include <stdbool.h>
 
 #define SW1_PIN 17

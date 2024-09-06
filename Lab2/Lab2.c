@@ -2,10 +2,11 @@
 #include "sw_in.h"
 #include <stdint.h>
 #include "led_out.h"
+#include <stdbool.h>
 
 main() {
     bool in1, in2;
-    uint16_t out;
+    uint8_t out;
     sw_in_init();
     led_out_init();
     while(1) {
