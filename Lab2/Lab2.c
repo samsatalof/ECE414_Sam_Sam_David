@@ -13,10 +13,10 @@ int main() {
         in1 = sw_in_read1();
         in2 = sw_in_read2();
 
-        if (in1 && in2) out = 0xFF;
-        else if (in1 && !in2) out = 0x80;
-        else if (!in1 && in2) out = 0x01;
-        else out = 0x40;
+        if (!in1 && !in2) out = 0xFF;
+        else if (!in1 && in2) out = 0x80;
+        else if (in1 && !in2) out = 0x01;
+        else out = 0x00;
 
         led_out_write(out);
     }

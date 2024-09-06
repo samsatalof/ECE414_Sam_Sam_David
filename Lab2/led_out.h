@@ -3,6 +3,7 @@
 
 #include "pico/stdlib.h"
 #include <stdbool.h>
+#include <stdint.h>
 
 void led_out_init();
 

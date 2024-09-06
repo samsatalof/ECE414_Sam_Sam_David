@@ -1,25 +1,22 @@
 #include "sw_in.h"
 #include <stdint.h>
 
-#define PADCTL_GPIO16  (volatile uint32_t *) (0x4001c000u + 0x00000044u)
-#define PADCTL_GPIO17  (volatile uint32_t *) (0x4001c000u + 0x00000048u)
-
 void sw_in_init() {
-    volatile uint32_t *pad16 = (PADCTL_GPIO16);
-    volatile uint32_t *pad17 = (PADCTL_GPIO17);
+    gpio_init(16);
+    gpio_set_dir(16, GPIO_IN);
+    gpio_pull_up(16);
 
-    *pad16 |= 0x000000C4;
-    *pad17 |= 0x000000C4;
+    gpio_init(17);
+    gpio_set_dir(17, GPIO_IN);
+    gpio_pull_up(17);
 }
 
 bool sw_in_read1() {
-    bool in;
-    in = gpio_get(17);
-    return in;
+    bool sw1val = gpio_get(17);
+    return sw1val;
 }
 
 bool sw_in_read2() {
-    bool in;
-    in = gpio_get(16);
-    return in;
+    bool sw2val = gpio_get(16);
+    return sw2val;
 }
