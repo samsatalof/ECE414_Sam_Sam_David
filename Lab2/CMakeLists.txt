@@ -8,6 +8,8 @@ pico_sdk_init()
 
 add_executable(Lab2
         Lab2.c
+	sw_in.c
+	led_out.c
         )
 
 # pull in common dependencies

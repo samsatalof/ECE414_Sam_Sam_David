@@ -4,7 +4,7 @@
 #include "led_out.h"
 #include <stdbool.h>
 
-main() {
+int main() {
     bool in1, in2;
     uint8_t out;
     sw_in_init();
@@ -16,7 +16,7 @@ main() {
         if (in1 && in2) out = 0xFF;
         else if (in1 && !in2) out = 0x80;
         else if (!in1 && in2) out = 0x01;
-        else out = 0x00;
+        else out = 0x40;
 
         led_out_write(out);
     }

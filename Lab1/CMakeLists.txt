@@ -10,6 +10,8 @@ add_executable(blink2
         blink2.c
         )
 
+call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat" amd64
+
 # pull in common dependencies
 target_link_libraries(blink2 pico_stdlib pico_bootsel_via_double_reset)
 

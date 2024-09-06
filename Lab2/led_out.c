@@ -21,12 +21,12 @@ void led_out_init() {
 }
 
 void led_out_write(uint8_t val) {
-    gpio_put(2, val & 0x01);
-    gpio_put(3, (val & 0x02) >> 1);
-    gpio_put(4, (val & 0x04) >> 2);
-    gpio_put(5, (val & 0x08) >> 3);
-    gpio_put(6, (val & 0x10) >> 4);
-    gpio_put(7, (val & 0x20) >> 5);
-    gpio_put(8, (val & 0x40) >> 6);
-    gpio_put(9, (val & 0x80) >> 7);
+    gpio_put(2, (bool) val & 0x01);
+    gpio_put(3, (bool) (val & 0x02) >> 1);
+    gpio_put(4, (bool) (val & 0x04) >> 2);
+    gpio_put(5, (bool) (val & 0x08) >> 3);
+    gpio_put(6, (bool) (val & 0x10) >> 4);
+    gpio_put(7, (bool) (val & 0x20) >> 5);
+    gpio_put(8, (bool) (val & 0x40) >> 6);
+    gpio_put(9, (bool) (val & 0x80) >> 7);
 }
