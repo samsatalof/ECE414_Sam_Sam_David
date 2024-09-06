@@ -1,4 +1,5 @@
 #include "led_out.h"
+#include <stdint.h>
 
 void led_out_init() {
     gpio_init(2);

@@ -1,5 +1,6 @@
 #include "pico/stdlib.h"
 #include "sw_in.h"
+#include <stdint.h>
 #include "led_out.h"
 
 main() {
