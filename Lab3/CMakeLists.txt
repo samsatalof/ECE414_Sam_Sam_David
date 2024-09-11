@@ -2,19 +2,23 @@ cmake_minimum_required(VERSION 3.13)
 
 include(pico_sdk_import.cmake)
 
-project(Lab2)
+project(Lab3)
 
 pico_sdk_init()
 
-add_executable(Lab2
-        Lab2.c
+add_executable(Lab3
+        Lab3.c
 	sw_in.c
 	led_out.c
+        debounce_sw1.c
+        debounce_sw2.c
+        timer.c
+        
         )
 
 # pull in common dependencies
-target_link_libraries(Lab2 pico_stdlib pico_bootsel_via_double_reset)
+target_link_libraries(Lab3 pico_stdlib pico_bootsel_via_double_reset)
 
 # create map/bin/hex file etc.
-pico_add_extra_outputs(Lab2)
+pico_add_extra_outputs(Lab3)
 
