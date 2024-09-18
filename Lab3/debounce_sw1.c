@@ -1,13 +1,13 @@
 /* 
- * File:   debounce_sw2.c
- * Author: David Green, Sams: Owens and Satalof, nestorj
+ * File:   debounce_sw1.c
+ * Author: nestorj
  *
  * Debounce a switch read by the sw_in module
  */
 
 #include "stdio.h"
 #include "pico/stdlib.h"
-#include "debounce_sw2.h"
+#include "debounce_sw1.h"
 #include "sw_in.h"
 
 // flag indicating button pressed and debounced
@@ -18,13 +18,13 @@ static bool btn_pressed;
 
 static enum DB_States {NOPUSH, MAYBEPUSH, PUSHED, MAYBENOPUSH} DB_State;
 
-void debounce_sw2_init() {
+void debounce_sw1_init() {
     DB_State = NOPUSH;
     btn_pressed = false;
 }
 
-void debounce_sw2_tick() {
-    bool btn = sw_in_read2();
+void debounce_sw1_tick() {
+    bool btn = sw_in_read1();
     switch(DB_State) {
         case NOPUSH:
             if (btn) DB_State = MAYBEPUSH;
@@ -57,7 +57,7 @@ void debounce_sw2_tick() {
 
 // return TRUE the first time the function is called after the button has 
 // been pressed.  Return FALSE until the button is released and pressed again
-bool debounce_sw2_pressed() {
+bool debounce_sw1_pressed() {
     if (btn_pressed) {
         btn_pressed = false; 
         return true;

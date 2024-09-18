@@ -1,3 +1,6 @@
+/* This module initalizes the switches and reads from them. 
+  By: Sam Owens, Sam Satalof and David Green */
+
 #ifndef SW_IN_H
 #define SW_IN_H
 
