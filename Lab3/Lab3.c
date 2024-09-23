@@ -225,6 +225,8 @@ void tick()
                     ledsStates = 0x80;
                 }
                 led_out_write(ledsStates);
+            } else {
+                PONG_State = Init;
             }
             // Output a message to the UART indicating which player lost.
             printf("Left player lost\n");
@@ -249,6 +251,8 @@ void tick()
                     ledsStates = 0x00;
                 }
                 led_out_write(ledsStates);
+            } else {
+                PONG_State = Init;
             }
             // Output a message to the UART indicating which player lost.
             printf("Right player lost\n");
@@ -266,7 +270,6 @@ void tick()
             printf("DEBUG: decreasing game tick speed to 100ms\n");
             gameTimer = 1000;
         }
-        PONG_State = Init;
         break;
 
     default:
