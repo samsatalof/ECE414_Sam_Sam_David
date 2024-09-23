@@ -38,8 +38,8 @@ uint8_t ledsStatesCounter = 0;
 
 uint8_t victoryPulse = 0;
 
-uint32_t t1, t2, t3, t4;  // Timers for button debounce and game ticks
-uint32_t gameTimer = 300; // Tick timer for game varies between 100ms and 300ms.
+uint32_t t1, t2, t3, t4;   // Timers for button debounce and game ticks
+uint32_t gameTimer = 1000; // Tick timer for game varies between 100ms and 300ms.
 uint8_t numberOfRoundsPlayed = 0;
 
 uint32_t randValue;
@@ -58,18 +58,19 @@ void tick()
         if (randValue > 0)
         {
             currentPlayer = PlayerL;
-            ledsStates = 0x01;
+            ledsStates = 0x80;
         }
         else
         {
             currentPlayer = PlayerR;
-            ledsStates = 0x80;
+            ledsStates = 0x01;
         }
         led_out_write(ledsStates);
         printf("New round: %s serves\n", currentPlayer);
         printf("DEBUG: Round #%d", numberOfRoundsPlayed);
 
         PONG_State = Serve;
+        ledsStatesCounter = 0;
         break;
     case Serve:
         printf("DEBUG: New tick, state is now: Serve\n"); // DEBUG ONLY LINE, Prints state machine state to UART console.
@@ -98,17 +99,40 @@ void tick()
         break;
     case Travel:
         printf("DEBUG: New tick, state is now: Travel\n"); // DEBUG ONLY LINE, Prints state machine state to UART console.
-
         // Check if the ball is at either of the extremes
         if (currentPlayer == PlayerL)
         {
-            if (ledsStatesCounter < 21)
+            if (ledsStatesCounter < 7)
             {
-                if (ledsStatesCounter % 3 == 0)
+                //ledsStates = ledsStates << 2;
+                switch (ledsStatesCounter)
                 {
-                    ledsStates << 1;
-                    led_out_write(ledsStates);
+                case 0:
+                    ledsStates = 0x02;
+                    break;
+                case 1:
+                    ledsStates = 0x04;
+                    break;
+                case 2:
+                    ledsStates = 0x08;
+                    break;
+                case 3:
+                    ledsStates = 0x10;
+                    break;
+                case 4:
+                    ledsStates = 0x20;
+                    break;
+                case 5:
+                    ledsStates = 0x40;
+                    break;
+                case 6:
+                    ledsStates = 0x80;
+                    break;
+                default:
+                    break;
                 }
+
+                led_out_write(ledsStates);
                 ledsStatesCounter += 1;
             }
             else
@@ -118,13 +142,36 @@ void tick()
         }
         else // currentPlayer==PlayerR
         {
-            if (ledsStatesCounter < 21)
+            if (ledsStatesCounter < 7)
             {
-                if (ledsStatesCounter % 3 == 0)
+                //ledsStates = ledsStates >> 2;
+                switch (ledsStatesCounter)
                 {
-                    ledsStates >> 1;
-                    led_out_write(ledsStates);
+                case 0:
+                    ledsStates = 0x40;
+                    break;
+                case 1:
+                    ledsStates = 0x20;
+                    break;
+                case 2:
+                    ledsStates = 0x10;
+                    break;
+                case 3:
+                    ledsStates = 0x08;
+                    break;
+                case 4:
+                    ledsStates = 0x04;
+                    break;
+                case 5:
+                    ledsStates = 0x02;
+                    break;
+                case 6:
+                    ledsStates = 0x01;
+                    break;
+                default:
+                    break;
                 }
+                led_out_write(ledsStates);
                 ledsStatesCounter += 1;
             }
             else
@@ -137,19 +184,21 @@ void tick()
     case Thwack:
         printf("DEBUG: New tick, state is now: Thwack\n"); // DEBUG ONLY LINE, Prints state machine state to UART console.
 
-        if ((currentPlayer == PlayerL && debounce_sw2_pressed()))
+        if ((currentPlayer == PlayerL && debounce_sw1_pressed()))
         {
             currentPlayer = PlayerR;
+            PONG_State = Travel;
         }
-        else if ((currentPlayer == PlayerR && debounce_sw1_pressed()))
+        else if ((currentPlayer == PlayerR && debounce_sw2_pressed()))
         {
             currentPlayer = PlayerL;
+            PONG_State = Travel;
         }
         else
         {
             PONG_State = Victory;
         }
-
+        ledsStatesCounter = 0;
         break;
 
     case Victory:
@@ -210,12 +259,12 @@ void tick()
         if (numberOfRoundsPlayed > 3)
         {
             printf("DEBUG: decreasing game tick speed to 200ms\n");
-            gameTimer = 200;
+            gameTimer = 2000;
         }
         else if (numberOfRoundsPlayed > 5)
         {
             printf("DEBUG: decreasing game tick speed to 100ms\n");
-            gameTimer = 100;
+            gameTimer = 1000;
         }
         PONG_State = Init;
         break;
