@@ -39,7 +39,7 @@ uint8_t ledsStatesCounter = 0;
 uint8_t victoryPulse = 0;
 
 uint32_t t1, t2, t3, t4;   // Timers for button debounce and game ticks
-uint32_t gameTimer = 1000; // Tick timer for game varies between 100ms and 300ms.
+uint32_t gameTimer = 300; // Tick timer for game varies between 100ms and 300ms.
 uint8_t numberOfRoundsPlayed = 0;
 
 uint32_t randValue;
@@ -196,6 +196,7 @@ void tick()
         }
         else
         {
+            victoryPulse = 0;
             PONG_State = Victory;
         }
         ledsStatesCounter = 0;
@@ -263,12 +264,12 @@ void tick()
         if (numberOfRoundsPlayed > 3)
         {
             printf("DEBUG: decreasing game tick speed to 200ms\n");
-            gameTimer = 2000;
+            gameTimer = 200;
         }
         else if (numberOfRoundsPlayed > 5)
         {
             printf("DEBUG: decreasing game tick speed to 100ms\n");
-            gameTimer = 1000;
+            gameTimer = 100;
         }
         break;
 
