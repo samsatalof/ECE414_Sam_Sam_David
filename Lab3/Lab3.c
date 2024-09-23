@@ -245,7 +245,7 @@ int main()
     initializeStuff();
     printf("Test that the UART WORKS BEFORE STATE MACHINE\n");
     // Set initial state for the state machine to begin:
-    PONG_State = Serve;
+    PONG_State = Init;
     while (1)
     {
         // Button Debounce Code
