@@ -24,7 +24,7 @@ void debounce_sw2_init() {
 }
 
 void debounce_sw2_tick() {
-    bool btn = sw_in_read2();
+    bool btn = !sw_in_read2();
     switch(DB_State) {
         case NOPUSH:
             if (btn) DB_State = MAYBEPUSH;

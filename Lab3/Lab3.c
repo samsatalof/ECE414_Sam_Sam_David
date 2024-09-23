@@ -17,9 +17,9 @@
 #define UART_TX_PIN 0
 #define UART_RX_PIN 1
 
-
 enum PONG_States
 {
+    Init,
     Serve,
     Travel,
     Thwack,
@@ -48,11 +48,11 @@ char buff[256];
 
 void tick()
 {
-    // sprintf("DEBUG: New tick, state is now: %s \n", PONG_State);
-    uart_puts(UART_ID, buff); // DEBUG ONLY LINE, Prints state machine state to UART console.
+
     switch (PONG_State)
     {
-    case Serve:
+    case Init:
+
         // Initialize currentPlayer with a random value.
         randValue = rand() % 2;
         if (randValue > 0)
@@ -66,8 +66,13 @@ void tick()
             ledsStates = 0x80;
         }
         led_out_write(ledsStates);
-        // uart_puts(UART_ID, sprintf("New round: %s serves\n", currentPlayer));
-        // uart_puts(UART_ID, sprintf("DEBUG: Round #%d", numberOfRoundsPlayed));
+        printf("New round: %s serves\n", currentPlayer);
+        printf("DEBUG: Round #%d", numberOfRoundsPlayed);
+
+        PONG_State = Serve;
+        break;
+    case Serve:
+        printf("DEBUG: New tick, state is now: Serve\n"); // DEBUG ONLY LINE, Prints state machine state to UART console.
 
         // Serve the ball from the current player.
         if (currentPlayer == PlayerL)
@@ -92,13 +97,19 @@ void tick()
         }
         break;
     case Travel:
+        printf("DEBUG: New tick, state is now: Travel\n"); // DEBUG ONLY LINE, Prints state machine state to UART console.
+
         // Check if the ball is at either of the extremes
         if (currentPlayer == PlayerL)
         {
-            if (ledsStatesCounter < 7)
+            if (ledsStatesCounter < 21)
             {
+                if (ledsStatesCounter % 3 == 0)
+                {
+                    ledsStates << 1;
+                    led_out_write(ledsStates);
+                }
                 ledsStatesCounter += 1;
-                ledsStates << 1;
             }
             else
             {
@@ -107,13 +118,24 @@ void tick()
         }
         else // currentPlayer==PlayerR
         {
-            ledsStatesCounter += 1;
-            ledsStates >> 1;
-            // Continue moving the ball across the field
+            if (ledsStatesCounter < 21)
+            {
+                if (ledsStatesCounter % 3 == 0)
+                {
+                    ledsStates >> 1;
+                    led_out_write(ledsStates);
+                }
+                ledsStatesCounter += 1;
+            }
+            else
+            {
+                PONG_State = Thwack;
+            }
         }
 
         break;
     case Thwack:
+        printf("DEBUG: New tick, state is now: Thwack\n"); // DEBUG ONLY LINE, Prints state machine state to UART console.
 
         if ((currentPlayer == PlayerL && debounce_sw2_pressed()))
         {
@@ -131,6 +153,8 @@ void tick()
         break;
 
     case Victory:
+        printf("DEBUG: New tick, state is now: Victory\n"); // DEBUG ONLY LINE, Prints state machine state to UART console.
+
         // Flash the LED nearest the winning player and switch to serve.
         if (currentPlayer == PlayerL)
         {
@@ -153,6 +177,8 @@ void tick()
                 }
                 led_out_write(ledsStates);
             }
+            // Output a message to the UART indicating which player lost.
+            printf("Left player lost\n");
         }
         else if (currentPlayer == PlayerR)
         {
@@ -175,21 +201,23 @@ void tick()
                 }
                 led_out_write(ledsStates);
             }
+            // Output a message to the UART indicating which player lost.
+            printf("Right player lost\n");
         }
-        // Output a message to the UART indicating which player lost.
-        // uart_puts(UART_ID, sprintf("Player %s lost\n", currentPlayer));
+
         numberOfRoundsPlayed++;
-        // uart_puts(UART_ID, sprintf("DEBUG: Current Tick Speed is:%d", gameTimer));
+        printf("DEBUG: Current Tick Speed is:%d\n", gameTimer);
         if (numberOfRoundsPlayed > 3)
         {
-            // uart_puts(UART_ID, sprintf("DEBUG: decreasing game tick speed to 200ms"));
+            printf("DEBUG: decreasing game tick speed to 200ms\n");
             gameTimer = 200;
         }
         else if (numberOfRoundsPlayed > 5)
         {
-            // uart_puts(UART_ID, sprintf("DEBUG: decreasing game tick speed to 100ms"));
+            printf("DEBUG: decreasing game tick speed to 100ms\n");
             gameTimer = 100;
         }
+        PONG_State = Init;
         break;
 
     default:
@@ -200,6 +228,10 @@ void tick()
 void initializeStuff()
 {
     stdio_init_all();
+    uart_init(UART_ID, BAUD_RATE);
+    gpio_set_function(UART_TX_PIN, GPIO_FUNC_UART);
+    gpio_set_function(UART_RX_PIN, GPIO_FUNC_UART);
+
     led_out_init();
     sw_in_init();
     debounce_sw1_init();
@@ -211,7 +243,9 @@ void initializeStuff()
 int main()
 {
     initializeStuff();
-    uart_puts(UART_ID, "AHAHAHAHAHAHGAHGAGHAGH!!!\n");
+    printf("Test that the UART WORKS BEFORE STATE MACHINE\n");
+    // Set initial state for the state machine to begin:
+    PONG_State = Serve;
     while (1)
     {
         // Button Debounce Code
@@ -226,8 +260,7 @@ int main()
         t4 = timer_read();
         if (timer_elapsed_ms(t3, t4) >= gameTimer)
         {
-            debounce_sw1_tick();
-            debounce_sw2_tick();
+            tick();
             t3 = t4;
         }
     }
