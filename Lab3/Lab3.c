@@ -59,13 +59,13 @@ void tick()
         {
             currentPlayer = PlayerL;
             ledsStates = 0x80;
-            printf("Left Player Serves");
+            printf("Left Player Serves\n");
         }
         else
         {
             currentPlayer = PlayerR;
             ledsStates = 0x01;
-            printf("Right Player Serves");
+            printf("Right Player Serves\n");
         }
 
         led_out_write(ledsStates); // Writes to the initial LED indicating serving player
@@ -222,15 +222,15 @@ void tick()
         }
 
         numberOfRoundsPlayed++;
-        printf("DEBUG: Current Tick Speed is:%d\n", gameTimer);
+        //printf("DEBUG: Current Tick Speed is:%d\n", gameTimer); // Relevant to Test T4
         if (numberOfRoundsPlayed > 3)
         {
-            printf("DEBUG: decreasing game tick speed to 200ms\n");
+            //printf("DEBUG: decreasing game tick speed to 200ms\n"); // Relevant to Test T4
             gameTimer = 200;
         }
         else if (numberOfRoundsPlayed > 5)
         {
-            printf("DEBUG: decreasing game tick speed to 100ms\n");
+           // printf("DEBUG: decreasing game tick speed to 100ms\n"); // Relevant to Test T4
             gameTimer = 100;
         }
         break;
@@ -258,7 +258,7 @@ void initializeStuff()
 int main()
 {
     initializeStuff();
-    printf("Test that the UART WORKS BEFORE STATE MACHINE\n");
+    //printf("Test that the UART WORKS BEFORE STATE MACHINE\n"); // Relevant to Test T4
     // Set initial state for the state machine to begin:
     PONG_State = Init;
     while (1)
