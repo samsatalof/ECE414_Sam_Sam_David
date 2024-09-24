@@ -59,11 +59,13 @@ void tick()
         {
             currentPlayer = PlayerL;
             ledsStates = 0x80;
+            printf("Left Player Serves");
         }
         else
         {
             currentPlayer = PlayerR;
             ledsStates = 0x01;
+            printf("Right Player Serves");
         }
 
         led_out_write(ledsStates); // Writes to the initial LED indicating serving player
