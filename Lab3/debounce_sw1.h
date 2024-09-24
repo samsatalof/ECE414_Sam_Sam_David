@@ -8,6 +8,7 @@
 #ifndef DEBOUNCER_H
 #define	DEBOUNCER_H
 
+#include <stdbool.h>
 #include "pico/stdlib.h"
 
 // use to schedule in main function:
@@ -22,4 +23,3 @@ void debounce_sw1_tick();
 bool debounce_sw1_pressed();
 
 #endif	/* DEBOUNCER_H */
-

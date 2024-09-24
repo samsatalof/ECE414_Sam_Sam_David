@@ -63,6 +63,3 @@ bool debounce_sw2_pressed() {
         return true;
     } else return false;
 }
-
-
-

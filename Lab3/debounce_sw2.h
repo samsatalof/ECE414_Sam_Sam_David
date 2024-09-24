@@ -1,5 +1,5 @@
 /* 
- * File:   debounce_sw1.h
+ * File:   debounce_sw2.h
  * Author: David Green, Sams: Owens and Satalof, nestorj
  *
  * Debounce a switch read by the sw_in module
@@ -8,6 +8,7 @@
 #ifndef DEBOUNCER_H2
 #define	DEBOUNCER_H2
 
+#include <stdbool.h>
 #include "pico/stdlib.h"
 
 // use to schedule in main function:
@@ -21,5 +22,4 @@ void debounce_sw2_tick();
 // been pressed.  Return FALSE until the button is released and pressed again
 bool debounce_sw2_pressed();
 
-#endif	/* DEBOUNCER_H */
-
+#endif	/* DEBOUNCER_H2 */
