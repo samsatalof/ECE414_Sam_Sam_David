@@ -113,6 +113,11 @@ void tick()
                 PONG_State = Thwack;
                 ledsStatesCounter = 0;
             }
+            if (debounce_sw1_pressed())
+            {
+                PONG_State = Victory;
+                ledsStatesCounter = 0;
+            }
         }
         else // currentPlayer==PlayerR
         {
@@ -125,6 +130,11 @@ void tick()
             else
             {
                 PONG_State = Thwack;
+                ledsStatesCounter = 0;
+            }
+            if (debounce_sw2_pressed())
+            {
+                PONG_State = Victory;
                 ledsStatesCounter = 0;
             }
         }
