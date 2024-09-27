@@ -9,6 +9,7 @@
 
 #include <inttypes.h>
 #include <stdbool.h>
+#include "pico/stdlib.h"
 
 #define CLK_GPIO 17
 #define MOSI_GPIO 19
@@ -18,7 +19,7 @@
 #define Xpos_GPIO 22
 #define Xneg_GPIO 26
 #define Ypos_GPIO 27
-#define Yneg_GPIO 212
+#define Yneg_GPIO 21
 
 // Reads the status of touchscreen, returning true when a finger/stylus is placed on display,
 // Two pointers are then assigned current finger/stylus position in LCD coordinates
