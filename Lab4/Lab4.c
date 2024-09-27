@@ -6,7 +6,7 @@
 #include <stdio.h>
 
 uint16_t *px, *py;
-char buf [31];
+char buf[31];
 int main()
 {
     ts_lcd_init();
@@ -14,9 +14,12 @@ int main()
     {
         if (get_ts_lcd(px, py))
         {
-            tft_fillScreen(ILI9340_BLACK);
-            tft_drawLine(*px - 5, *py, *px + 5, *py, ILI9340_YELLOW);
-            tft_drawLine(*px, *py - 5, *px, *py + 5, ILI9340_YELLOW);
+            if ((px != NULL) && (py != NULL))
+            {
+                tft_fillScreen(ILI9340_BLACK);
+                tft_drawLine(*px - 5, *py, *px + 5, *py, ILI9340_YELLOW);
+                tft_drawLine(*px, *py - 5, *px, *py + 5, ILI9340_YELLOW);
+            }
         }
         else
         {
