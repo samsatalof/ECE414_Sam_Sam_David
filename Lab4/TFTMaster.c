@@ -67,6 +67,8 @@ POSSIBILITY OF SUCH DAMAGE.
 //#include "SPIPIO.pio.h" //Our assembled program
 #include "TFTMaster.h" //Header file
 #include "glcdfont.c" //Font file
+#include <inttypes.h>
+#include <stdbool.h>
 
 #define pgm_read_byte(addr) (*(const unsigned char *)(addr)) //Read byte at the address
 
