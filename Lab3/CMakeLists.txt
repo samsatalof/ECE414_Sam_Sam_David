@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.13)
 
 include(pico_sdk_import.cmake)
 
-project(Lab3) #unit_tests
+project(Lab3 C ASM CXX) #unit_tests
 
 pico_sdk_init()
 
