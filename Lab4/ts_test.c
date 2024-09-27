@@ -34,4 +34,6 @@ int main()
             tft_writeString(buf);
         }
     }
+    free(px);
+    free(py);
 }
