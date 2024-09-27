@@ -9,6 +9,8 @@ uint16_t *px, *py;
 char buf[31];
 int main()
 {
+    px = malloc (2);
+    py = malloc(2);
     ts_lcd_init();
     while (1)
     {
