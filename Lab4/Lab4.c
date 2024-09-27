@@ -3,12 +3,12 @@
 #include <inttypes.h>
 #include "TouchScreen.h"
 #include <stdbool.h>
+#include <stdio.h>
 
 uint16_t *px, *py;
-char *buf;
+char buf [31];
 int main()
 {
-    buf = malloc(31);
     ts_lcd_init();
     while (1)
     {
