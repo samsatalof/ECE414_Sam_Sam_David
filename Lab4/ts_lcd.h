@@ -20,6 +20,8 @@
 #define Xneg_GPIO 26
 #define Ypos_GPIO 27
 #define Yneg_GPIO 21
+#define touchscrn_width 240
+#define touchscrn_height 320
 
 // Reads the status of touchscreen, returning true when a finger/stylus is placed on display,
 // Two pointers are then assigned current finger/stylus position in LCD coordinates
