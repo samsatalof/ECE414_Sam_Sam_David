@@ -64,7 +64,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "pico/stdlib.h"
 #include "hardware/pio.h"
 #include "hardware/irq.h"
-#include "SPIPIO.pio.h" //Our assembled program
+//#include "SPIPIO.pio.h" //Our assembled program
 #include "TFTMaster.h" //Header file
 #include "glcdfont.c" //Font file
 
