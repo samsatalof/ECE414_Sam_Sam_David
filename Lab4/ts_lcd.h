@@ -7,9 +7,8 @@
 #ifndef TS_LCD_H
 #define TS_LCD_H
 
-#include <inttypes.h>
 #include <stdbool.h>
-#include "pico/stdlib.h"
+#include <inttypes.h>
 
 #define CLK_GPIO 17
 #define MOSI_GPIO 19

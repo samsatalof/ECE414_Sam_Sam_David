@@ -1,12 +1,15 @@
 #include "ts_lcd.h"
 #include "TFTMaster.h"
+#include <inttypes.h>
+#include "TouchScreen.h"
+#include <stdbool.h>
 
 uint16_t *px, *py;
-
+char *buf;
 int main()
 {
+    buf = malloc(31);
     ts_lcd_init();
-    //char buff[16];
     while (1)
     {
         if (get_ts_lcd(px, py))
@@ -17,11 +20,8 @@ int main()
         }
         else
         {
-            tft_setCursor(10, 10);
-            tft_writeString("Last location pressed was: ");
-            tft_writeString(*px);
-
-            printf("Last location pressed was: %d, %d", *px, *py);
+            sprintf(buf, "Last location pressed was: %d, %d", *px, *py);
+            tft_writeString(buf);
         }
     }
 }
