@@ -7,10 +7,6 @@
 
 #ifndef _ADAFRUIT_TOUCHSCREEN_H_
 #define _ADAFRUIT_TOUCHSCREEN_H_
-//#include <stdint.h>    // notsure we need this
-#include "pico/stdlib.h"
-#include "hardware/gpio.h"
-#include "hardware/adc.h"
 
 /*
  * Pin Assigments for toucscreen

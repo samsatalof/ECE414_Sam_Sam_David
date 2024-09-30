@@ -7,10 +7,12 @@
 
 uint16_t *px, *py;
 char buf[31];
+uint16_t x, y;
 int main()
 {
-    px = malloc (2);
-    py = malloc(2);
+
+    px = &x;
+    py = &y;
     ts_lcd_init();
     while (1)
     {
@@ -34,6 +36,4 @@ int main()
             tft_writeString(buf);
         }
     }
-    free(px);
-    free(py);
 }

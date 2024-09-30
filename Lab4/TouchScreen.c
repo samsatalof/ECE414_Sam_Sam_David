@@ -8,9 +8,11 @@
 
 #include "stdio.h"
 #include "pico/stdlib.h"
-#include "hardware/gpio.h"
-#include "hardware/adc.h"
+//#include "hardware/gpio.h"
+//#include "hardware/adc.h"
 #include "TouchScreen.h"
+#include <inttypes.h>
+#include <stdbool.h>
 
 // increase or decrease the touchscreen oversampling. This is a little different than you may think:
 // 1 is no oversampling, whatever data we get is immediately returned
