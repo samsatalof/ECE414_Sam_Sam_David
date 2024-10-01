@@ -43,20 +43,4 @@ int main()
         sleep_ms(300);
 
     }
-
-    /*
-    while(1) {
-        if (get_ts_lcd(px, py))
-        {
-            if ((px != NULL) && (py != NULL))
-            {
-                tft_fillScreen(ILI9340_MAGENTA);
-            } else {
-                tft_fillScreen(ILI9340_BLACK);
-            }
-        } else {
-            tft_fillScreen(ILI9340_BLUE);
-        }
-    } */ 
-   //UNIT TEST!!!!!!!
 }
