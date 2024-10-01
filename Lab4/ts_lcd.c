@@ -2,13 +2,14 @@
 #include "pico/stdlib.h"
 #include "TFTMaster.h"
 #include "TouchScreen.h"
+#include "hardware/adc.h"
 
 bool get_ts_lcd(uint16_t *px, uint16_t *py)
 {
 
     struct TSPoint p;
     getPoint(&p);
-    if (!(p.z > 0))
+    if (!(p.z < 20000))
     {
         return false;
     }
@@ -28,7 +29,7 @@ void ts_lcd_init()
     tft_begin();
     tft_setRotation(0);
     tft_fillScreen(ILI9340_BLACK);
-    tft_setTextSize(4);
+    tft_setTextSize(1);
     tft_setTextColor2(ILI9340_MAGENTA,ILI9340_BLACK);
     tft_setCursor(10,10);
 }
