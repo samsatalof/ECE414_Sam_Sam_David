@@ -52,9 +52,9 @@ if (NOT PICO_SDK_PATH)
         endif ()
         set(FETCHCONTENT_BASE_DIR ${FETCHCONTENT_BASE_DIR_SAVE})
     else ()
-        message(FATAL_ERROR
-                "SDK location was not specified. Please set PICO_SDK_PATH or set PICO_SDK_FETCH_FROM_GIT to on to fetch from git."
-                )
+        #message(FATAL_ERROR
+         #       "SDK location was not specified. Please set PICO_SDK_PATH or set PICO_SDK_FETCH_FROM_GIT to on to fetch from git."
+          #      )
     endif ()
 endif ()
 
