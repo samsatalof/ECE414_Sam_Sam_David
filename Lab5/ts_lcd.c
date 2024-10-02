@@ -27,7 +27,7 @@ void ts_lcd_init()
     adc_init();
     tft_init_hw();
     tft_begin();
-    tft_setRotation(0);
+    tft_setRotation(1);
     tft_fillScreen(ILI9340_BLACK);
     tft_setTextSize(1);
     tft_setTextColor2(ILI9340_MAGENTA,ILI9340_BLACK);
