@@ -37,7 +37,7 @@ int main()
             {
                 CALC_State = Operand;
             }
-            if (clr_pressed = true)
+            if (clr_pressed() = true)
             {
                 CALC_State = CLR;
             }
@@ -49,7 +49,7 @@ int main()
 
             break;
         case Operator:
-            if (clr_pressed = true)
+            if (clr_pressed() = true)
             {
                 CALC_State = CLR;
             }
@@ -66,7 +66,7 @@ int main()
 
             break;
         case Operand_2:
-            if (clr_pressed = true)
+            if (clr_pressed() = true)
             {
                 CALC_State = CLR;
             }
@@ -89,7 +89,7 @@ int main()
             
             break;
         case Result:
-            if (clr_pressed = true)
+            if (clr_pressed() = true)
             {
                 CALC_State = CLR;
             }
@@ -101,7 +101,7 @@ int main()
             
 
         case DIV_0:
-            if (clr_pressed = true)
+            if (clr_pressed() = true)
             {
                 CALC_State = CLR;
             }
@@ -111,7 +111,7 @@ int main()
             }
             break;
         case CLR:
-            if (clr_pressed = true)
+            if (clr_pressed() = true)
             {
                 CALC_State = CLR;
             }
