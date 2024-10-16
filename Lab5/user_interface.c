@@ -5,11 +5,18 @@
 #include <stdbool.h>
 #include <stdio.h>
 
+uint16_t *px, *py; // Coordinates on the touchscreen
+uint16_t x, y;
+// Avoids malloc:
+px = &x;
+py = &y;
+ts_lcd_init(); // init function
+
 struct buttonPressed
 {
     bool depressed;
     char which_one;
-} depressed, which_one;
+};
 
 void drawInterface()
 {
@@ -94,7 +101,55 @@ void drawInterface()
     tft_writeString(buf);
 }
 
-struct getButton()
+struct buttonPressed getButton()
 {
-    
+    struct buttonPressed buttonPressedStruct;
+    if (get_ts_lcd(px, py))
+    {
+        if ((px != NULL) && (py != NULL)) // Checks the pointers aren't NULL
+        {
+            buttonPressedStruct.depressed = true;
+            // Figure out which button was pressed
+
+            // First check which column, then check which row within each column.
+            if ((px > 4) && (px < 79))
+            {
+                if ((py > 40) && (py < 100))
+                {
+                }
+                else if ()
+                {
+                }
+                else if ()
+                {
+                }
+                else if ()
+                {
+                }
+                else
+                {
+                    // User pressed outside any of the buttons.
+                }
+            }
+            else if ((px > 83) && (px < 158))
+            {
+            }
+            else if ((px > 162) && (px < 237))
+            {
+            }
+            else if ((px > 241) && (px < 316))
+            {
+            }
+            else
+            {
+                // User pressed outside any of the buttons.
+            }
+
+            buttonPressedStruct.which_one =
+        }
+    }
+    else
+    {
+        buttonPressedStruct.depressed = false;
+    }
 }
