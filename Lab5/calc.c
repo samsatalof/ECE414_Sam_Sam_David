@@ -25,9 +25,10 @@ int main()
         Error,
         CLR
 
-    } CALC_State;
+    }
 
-    void tick()
+    void
+    tick()
     {
 
         switch (CALC_State)
@@ -45,7 +46,6 @@ int main()
             {
                 CALC_State = Operator
             }
-            
 
             break;
         case Operator:
@@ -61,8 +61,6 @@ int main()
             {
                 CALC_State = Operand_2;
             }
-            
-            
 
             break;
         case Operand_2:
@@ -86,7 +84,7 @@ int main()
             {
                 CALC_State = Result;
             }
-            
+
             break;
         case Result:
             if (clr_pressed() = true)
@@ -98,7 +96,6 @@ int main()
             {
                 CALC_State = Result;
             }
-            
 
         case DIV_0:
             if (clr_pressed() = true)
@@ -123,10 +120,11 @@ int main()
             {
                 CALC_State = Operand;
             }
-            
+
             break;
-        default:
-            break;
+       
         }
+         default;
+            break;
     }
 }
