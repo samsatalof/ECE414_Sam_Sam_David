@@ -5,9 +5,20 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-void drawInterface() {
+struct buttonPressed
+{
+    bool depressed;
+    char which_one;
+} depressed, which_one;
+
+void drawInterface()
+{
+    char buf[2];
+    buf[1] = '\0';
     ts_lcd_init();
-    // Column 1: 
+
+    // Buttons:
+    // Column 1:
     tft_drawRoundRect(4, 40, 75, 45, 60, ILI9340_WHITE);
     tft_drawRoundRect(4, 90, 75, 45, 60, ILI9340_WHITE);
     tft_drawRoundRect(4, 140, 75, 45, 60, ILI9340_WHITE);
@@ -27,5 +38,63 @@ void drawInterface() {
     tft_drawRoundRect(241, 90, 75, 45, 60, ILI9340_YELLOW);
     tft_drawRoundRect(241, 140, 75, 45, 60, ILI9340_YELLOW);
     tft_drawRoundRect(241, 190, 75, 45, 60, ILI9340_YELLOW);
+
+    // Nums:
+    // Column 1:
+    buf[0] = '7';
+    tft_setCursor(34, 62);
+    tft_writeString(buf);
+    buf[0] = '4';
+    tft_setCursor(34, 107);
+    tft_writeString(buf);
+    buf[0] = '1';
+    tft_setCursor(34, 152);
+    tft_writeString(buf);
+    buf[0] = '0';
+    tft_setCursor(34, 197);
+    tft_writeString(buf);
+    // Column 2:
+    buf[0] = '8';
+    tft_setCursor(109, 62);
+    tft_writeString(buf);
+    buf[0] = '5';
+    tft_setCursor(109, 107);
+    tft_writeString(buf);
+    buf[0] = '2';
+    tft_setCursor(109, 152);
+    tft_writeString(buf);
+    buf[0] = 'C';
+    tft_setCursor(109, 197);
+    tft_writeString(buf);
+    // Column 3:
+    buf[0] = '9';
+    tft_setCursor(184, 62);
+    tft_writeString(buf);
+    buf[0] = '6';
+    tft_setCursor(184, 107);
+    tft_writeString(buf);
+    buf[0] = '3';
+    tft_setCursor(184, 152);
+    tft_writeString(buf);
+    buf[0] = '=';
+    tft_setCursor(184, 197);
+    tft_writeString(buf);
+    // Column 4:
+    buf[0] = '+';
+    tft_setCursor(259, 62);
+    tft_writeString(buf);
+    buf[0] = '-';
+    tft_setCursor(259, 107);
+    tft_writeString(buf);
+    buf[0] = 'X';
+    tft_setCursor(259, 152);
+    tft_writeString(buf);
+    buf[0] = '/';
+    tft_setCursor(259, 197);
+    tft_writeString(buf);
+}
+
+struct getButton()
+{
     
 }
