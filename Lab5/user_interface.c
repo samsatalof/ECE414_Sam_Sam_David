@@ -112,33 +112,97 @@ struct buttonPressed getButton()
             // Figure out which button was pressed
 
             // First check which column, then check which row within each column.
-            if ((px > 4) && (px < 79))
+            if ((px > 4) && (px < 79)) // Column 1
             {
-                if ((py > 40) && (py < 100))
+                if ((py > 40) && (py < 85)) // Row 1
                 {
+                    buttonPressedStruct.which_one = '7';
                 }
-                else if ()
+                else if ((py > 90) && (py < 135)) // Row 2
                 {
+                    buttonPressedStruct.which_one = '4';
                 }
-                else if ()
+                else if ((py > 140) && (py < 185)) // Row 3
                 {
+                    buttonPressedStruct.which_one = '1';
                 }
-                else if ()
+                else if ((py > 190) && (py < 235)) // Row 4
                 {
+                    buttonPressedStruct.which_one = '0';
                 }
                 else
                 {
                     // User pressed outside any of the buttons.
                 }
             }
-            else if ((px > 83) && (px < 158))
+            else if ((px > 83) && (px < 158)) // Column 2
             {
+                if ((py > 40) && (py < 85)) // Row 1
+                {
+                    buttonPressedStruct.which_one = '8';
+                }
+                else if ((py > 90) && (py < 135)) // Row 2
+                {
+                    buttonPressedStruct.which_one = '5';
+                }
+                else if ((py > 140) && (py < 185)) // Row 3
+                {
+                    buttonPressedStruct.which_one = '2';
+                }
+                else if ((py > 190) && (py < 235)) // Row 4
+                {
+                    buttonPressedStruct.which_one = 'C';
+                }
+                else
+                {
+                    // User pressed outside any of the buttons.
+                }
             }
-            else if ((px > 162) && (px < 237))
+            else if ((px > 162) && (px < 237)) // Column 3
             {
+                if ((py > 40) && (py < 85)) // Row 1
+                {
+                    buttonPressedStruct.which_one = '9';
+                }
+                else if ((py > 90) && (py < 135)) // Row 2
+                {
+                    buttonPressedStruct.which_one = '6';
+                }
+                else if ((py > 140) && (py < 185)) // Row 3
+                {
+                    buttonPressedStruct.which_one = '3';
+                }
+                else if ((py > 190) && (py < 235)) // Row 4
+                {
+                    buttonPressedStruct.which_one = '=';
+                }
+                else
+                {
+                    // User pressed outside any of the buttons.
+                }
             }
-            else if ((px > 241) && (px < 316))
+            else if ((px > 241) && (px < 316)) // Column 4
             {
+                if ((py > 40) && (py < 85)) // Row 1
+                {
+                    buttonPressedStruct.which_one = '+';
+                }
+                else if ((py > 90) && (py < 135)) // Row 2
+                {
+                    buttonPressedStruct.which_one = '-';
+                }
+                else if ((py > 140) && (py < 185)) // Row 3
+                {
+                    buttonPressedStruct.which_one = '*';
+                }
+                else if ((py > 190) && (py < 235)) // Row 4
+                {
+                    buttonPressedStruct.which_one = '/';
+                }
+                else
+                {
+                    // User pressed outside any of the buttons.
+                }
             }
             else
             {
