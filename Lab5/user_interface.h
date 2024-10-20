@@ -9,4 +9,13 @@
 // Draws the interface for the calculator
 void drawInterface();
 
+struct buttonPressed // Defines a struct for managing when buttons are pressed.
+{
+    bool depressed;
+    char which_one;
+};
+
+// Make the struct extern so that it can be written to by user_interface.c and read from by calc.c.
+extern struct buttonPressed buttonPressedStruct;
+
 #endif

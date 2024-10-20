@@ -4,6 +4,7 @@
 #include "TouchScreen.h"
 #include <stdbool.h>
 #include <stdio.h>
+#include "user_interface.h"
 
 uint16_t *px, *py; // Coordinates on the touchscreen
 uint16_t x, y;
@@ -12,19 +13,13 @@ px = &x;
 py = &y;
 ts_lcd_init(); // init function
 
-struct buttonPressed
-{
-    bool depressed;
-    char which_one;
-};
-
 void drawInterface()
 {
     char buf[2];
     buf[1] = '\0';
     ts_lcd_init();
 
-    // Buttons:
+    // Draw the Buttons:
     // Column 1:
     tft_drawRoundRect(4, 40, 75, 45, 60, ILI9340_WHITE);
     tft_drawRoundRect(4, 90, 75, 45, 60, ILI9340_WHITE);
@@ -46,7 +41,7 @@ void drawInterface()
     tft_drawRoundRect(241, 140, 75, 45, 60, ILI9340_YELLOW);
     tft_drawRoundRect(241, 190, 75, 45, 60, ILI9340_YELLOW);
 
-    // Nums:
+    // Print the symbols onto the buttons:
     // Column 1:
     buf[0] = '7';
     tft_setCursor(34, 62);
@@ -101,15 +96,14 @@ void drawInterface()
     tft_writeString(buf);
 }
 
+// Figure out which button was pressed
 struct buttonPressed getButton()
 {
-    struct buttonPressed buttonPressedStruct;
     if (get_ts_lcd(px, py))
     {
         if ((px != NULL) && (py != NULL)) // Checks the pointers aren't NULL
         {
             buttonPressedStruct.depressed = true;
-            // Figure out which button was pressed
 
             // First check which column, then check which row within each column.
             if ((px > 4) && (px < 79)) // Column 1
@@ -133,6 +127,7 @@ struct buttonPressed getButton()
                 else
                 {
                     // User pressed outside any of the buttons.
+                    buttonPressedStruct.which_one = 'F'; // Failure code --potential unused
                 }
             }
             else if ((px > 83) && (px < 158)) // Column 2
@@ -156,6 +151,7 @@ struct buttonPressed getButton()
                 else
                 {
                     // User pressed outside any of the buttons.
+                    buttonPressedStruct.which_one = 'F'; // Failure code --potential unused
                 }
             }
             else if ((px > 162) && (px < 237)) // Column 3
@@ -179,6 +175,7 @@ struct buttonPressed getButton()
                 else
                 {
                     // User pressed outside any of the buttons.
+                    buttonPressedStruct.which_one = 'F'; // Failure code --potential unused
                 }
             }
             else if ((px > 241) && (px < 316)) // Column 4
@@ -202,14 +199,14 @@ struct buttonPressed getButton()
                 else
                 {
                     // User pressed outside any of the buttons.
+                    buttonPressedStruct.which_one = 'F'; // Failure code --potential unused
                 }
             }
             else
             {
                 // User pressed outside any of the buttons.
+                buttonPressedStruct.which_one = 'F'; // Failure code --potential unused
             }
-
-            buttonPressedStruct.which_one =
         }
     }
     else
