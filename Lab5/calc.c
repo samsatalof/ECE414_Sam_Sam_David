@@ -43,7 +43,9 @@ void tick()
     case Operand:
         if (buttonPressedStruct.depressed == true)
         {
+
             // Append each new digit to the operand.
+            // TODO --implement check for overflow if the user types too many digits into the calc.
             switch (buttonPressedStruct.which_one)
             {
             case '1':
@@ -130,43 +132,99 @@ void tick()
         {
             CALC_State = CLR;
         }
-        if (operand2_overwrite() == true)
+        if (buttonPressedStruct.depressed == true)
         {
-            CALC_State = Operand_2;
-        }
-        if (div_0_check() == true)
-        {
-            CALC_State = DIV_0;
-        }
-        if (overflow_check() == true)
-        {
-            CALC_State = Error;
-        }
-        if (eqls_pressed() == true)
-        {
-            CALC_State = Result;
-        }
+            // Append each new digit to the operand.
+            switch (buttonPressedStruct.which_one)
+            {
+            case '1':
+                operand2 = (operand2 * 10) + 1;
+                operator2_specified = true;
+                break;
+            case '2':
+                operand2 = (operand2 * 10) + 2;
+                operator2_specified = true;
+                break;
+            case '3':
+                operand2 = (operand2 * 10) + 3;
+                operator2_specified = true;
+                break;
+            case '4':
+                operand2 = (operand2 * 10) + 4;
+                operator2_specified = true;
+                break;
+            case '5':
+                operand2 = (operand2 * 10) + 5;
+                operator2_specified = true;
+                break;
+            case '6':
+                operand2 = (operand2 * 10) + 6;
+                operator2_specified = true;
+                break;
+            case '7':
+                operand2 = (operand2 * 10) + 7;
+                operator2_specified = true;
+                break;
+            case '8':
+                operand2 = (operand2 * 10) + 8;
+                operator2_specified = true;
+                break;
+            case '9':
+                operand2 = (operand2 * 10) + 9;
+                operator2_specified = true;
+                break;
+            default:
+                // Do nothing if a non-numerical button has been pressed.
+                break;
+            }
 
+            if (buttonPressedStruct.which_one = '=')
+            {
+                if (operand2 == 0)
+                {
+                    CALC_State = DIV_0;
+                }
+                else
+                {
+                    CALC_State = Result;
+                }
+            }
+            else // Allow the user to continue their input of the second operand.
+            {
+                CALC_State = Operand_2;
+            }
+        }
         break;
-    case Result:
-        if (clr_pressed() == true)
+        // Performs the calculation.
+    case Result: // TODO NEED TO IMPLEMENT OVERFLOW CHECKING!
+                 // TODO NEED TO PRINT THE RESULT TO THE SCREEN!
+        if (operator== '+')
+        {
+            calculated_result = operand1 + operand2;
+        }
+        else if (operator== '-')
+        {
+            calculated_result = operand1 - operand2;
+        }
+        else if (operator== '*')
+        {
+            calculated_result = operand1 * operand2;
+        }
+        else if (operator== '/')
+        {
+            calculated_result == operand1 / operand2;
+        }
+        // Clears the result and allows the user to perform a new calculation.
+        else if (buttonPressedStruct.depressed == true && buttonPressedStruct.which_one == 'C')
         {
             CALC_State = CLR;
         }
         break;
-        if (clr_pressed() == false)
-        {
-            CALC_State = Result;
-        }
-
     case DIV_0:
-        if (clr_pressed() == true)
+        // TODO NEED TO PRINT AN ERROR MESSAGE TO THE SCREEN WHEN THE USER TRIES TO DIVIDE BY ZERO!
+        if (buttonPressedStruct.depressed == true && buttonPressedStruct.which_one == 'C')
         {
             CALC_State = CLR;
-        }
-        if (clr_pressed() == false)
-        {
-            CALC_State = DIV_0;
         }
         break;
     case CLR:
@@ -180,14 +238,6 @@ void tick()
             buttonPressedStruct.depressed = false;
             buttonPressedStruct.which_one = 'F';
             operator2_specified = false;
-            CALC_State = Operand;
-        }
-        if (clr_pressed() == false)
-        {
-            CALC_State = Error; // WRONG CODE HERE! THIS DOESN"T MAKE SENSE!
-        }
-        if (boot_to_start() == true)
-        {
             CALC_State = Operand;
         }
         break;
