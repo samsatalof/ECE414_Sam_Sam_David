@@ -219,6 +219,13 @@ void tick()
         {
             CALC_State = CLR;
         }
+        // Allow the user to hit the equals button more than once in a row.
+        else if (buttonPressedStruct.depressed == true && buttonPressedStruct.which_one == '=' && (calculated_result != 0))
+        {
+            CALC_State = Result;
+        } else if((buttonPressedStruct.depressed == true && buttonPressedStruct.which_one == '=' && (calculated_result == 0)){
+            CALC_State = DIV_0;
+        }
         break;
     case DIV_0:
         // TODO NEED TO PRINT AN ERROR MESSAGE TO THE SCREEN WHEN THE USER TRIES TO DIVIDE BY ZERO!
