@@ -27,8 +27,8 @@ enum CALC_States
 };
 enum CALC_States CALC_State; // Create an instance of the enum.
 
-uint32_t operand1;
-uint32_t operand2;
+int32_t operand1;  
+int32_t operand2;  
 char operator;
 uint32_t calculated_result;
 bool operator2_specified;
