@@ -34,19 +34,9 @@ uint32_t calculated_result;
 bool operator2_specified;
 struct buttonPressed pressLoc;
 
-if (pressLoc.which_one == '-') {
-    operand1 = -operand1;
-    displayResult(operand1); 
-} else {
-    operand1 = (operand1 * 10) + 1;
-}
-
-if (pressLoc.which_one == '-') {
-    operand2 = -operand2;
-    displayResult(operand2); 
-} else {
-    operand2 = (operand2 * 10) + 1;
-}
+// Operand input logic:
+operand1 = (operand1 * 10) + pressLoc.which_one - '0';  // Handles dynamic digit input for operand1
+operand2 = (operand2 * 10) + pressLoc.which_one - '0';  // Handles dynamic digit input for operand2
 
 
 #define ALARM_NUM 0
