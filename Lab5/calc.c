@@ -32,9 +32,41 @@ uint32_t operand2;
 char operator;
 uint32_t calculated_result;
 bool operator2_specified;
+struct buttonPressed pressLoc;
+
+
+#define ALARM_NUM 0
+#define ALARM_IRQ timer_hardware_alarm_get_irq_num(timer_hw, ALARM_NUM)
+static volatile bool alarm_fired;
+
+void timer_ISR () {
+    // Clear the alarm irq
+    hw_clear_bits(&timer_hw->intr, 1u << ALARM_NUM);
+
+    // Assume alarm 0 has fired
+    printf("Alarm IRQ fired\n");
+    alarm_fired = true;
+}
 
 int main()
 {
+    // Enable the interrupt for our alarm (the timer outputs 4 alarm irqs)
+    hw_set_bits(&timer_hw->inte, 1u << ALARM_NUM);
+    // Set irq handler for alarm irq
+    irq_set_exclusive_handler(ALARM_IRQ, timer_ISR); // Tells the Pico that ALARM_IRQ is an ISR.
+    // Enable the alarm irq
+    irq_set_enabled(ALARM_IRQ, true);
+    // Enable interrupt in block and at processor
+
+    // Alarm is only 32 bits so if trying to delay more
+    // than that need to be careful and keep track of the upper
+    // bits
+    uint64_t target = timer_hw->timerawl + delay_us;
+
+    // Write the lower 32 bits of the target time to the alarm which
+    // will arm it
+    timer_hw->alarm[ALARM_NUM] = (uint32_t)target;
+    while(1);
 }
 
 bool overflowAdd(int original, int changeBy)
@@ -94,11 +126,11 @@ void tick()
     switch (CALC_State)
     {
     case Operand:
-        if (buttonPressedStruct.depressed == true)
+        if (pressLoc.depressed == true)
         {
             // Append each new digit to the operand.
             // TODO --implement check for overflow if the user types too many digits into the calc.
-            switch (buttonPressedStruct.which_one)
+            switch (pressLoc.which_one)
             {
             case '1':
                 operand1 = (operand1 * 10) + 1;
@@ -135,12 +167,12 @@ void tick()
             CALC_State = Operand;
         }
         // If the clear button is pressed, move to clear state.
-        if (buttonPressedStruct.depressed == true && buttonPressedStruct.which_one == 'C')
+        if (pressLoc.depressed == true && pressLoc.which_one == 'C')
         {
             CALC_State = CLR;
         }
         // If an operand already has been input and a new operator has been entered, move to the operator state.
-        if (buttonPressedStruct.depressed == true && (buttonPressedStruct.which_one == '+' || buttonPressedStruct.which_one == '-' || buttonPressedStruct.which_one == '*' || buttonPressedStruct.which_one == '/'))
+        if (pressLoc.depressed == true && (pressLoc.which_one == '+' || pressLoc.which_one == '-' || pressLoc.which_one == '*' || pressLoc.which_one == '/'))
         {
             CALC_State = Operator;
         }
@@ -150,26 +182,26 @@ void tick()
         {
             CALC_State = CLR;
         }
-        if (buttonPressedStruct.depressed == true)
+        if (pressLoc.depressed == true)
         {
-            if (buttonPressedStruct.which_one == '+')
+            if (pressLoc.which_one == '+')
             {
                 operator= '+';
             }
-            else if (buttonPressedStruct.which_one == '-')
+            else if (pressLoc.which_one == '-')
             {
                 operator= '-';
             }
-            else if (buttonPressedStruct.which_one == '*')
+            else if (pressLoc.which_one == '*')
             {
                 operator= '*';
             }
-            else if (buttonPressedStruct.which_one == '/')
+            else if (pressLoc.which_one == '/')
             {
                 operator= '/';
             }
             // Allow the operator to be continuously overwritten until another operand is input.
-            if (operator2_specified == false && (buttonPressedStruct.which_one == '1' || buttonPressedStruct.which_one == '2' || buttonPressedStruct.which_one == '3' || buttonPressedStruct.which_one == '4' || buttonPressedStruct.which_one == '5' || buttonPressedStruct.which_one == '6' || buttonPressedStruct.which_one == '7' || buttonPressedStruct.which_one == '8' || buttonPressedStruct.which_one == '9'))
+            if (operator2_specified == false && (pressLoc.which_one == '1' || pressLoc.which_one == '2' || pressLoc.which_one == '3' || pressLoc.which_one == '4' || pressLoc.which_one == '5' || pressLoc.which_one == '6' || pressLoc.which_one == '7' || pressLoc.which_one == '8' || pressLoc.which_one == '9'))
             {
                 displayOperator(operator);
                 CALC_State = Operand_2;
@@ -183,14 +215,14 @@ void tick()
         break;
     case Operand_2:
         // If the clear button is pressed, move to clear state.
-        if (buttonPressedStruct.depressed == true && buttonPressedStruct.which_one == 'C')
+        if (pressLoc.depressed == true && pressLoc.which_one == 'C')
         {
             CALC_State = CLR;
         }
-        if (buttonPressedStruct.depressed == true)
+        if (pressLoc.depressed == true)
         {
             // Append each new digit to the operand.
-            switch (buttonPressedStruct.which_one)
+            switch (pressLoc.which_one)
             {
             case '1':
                 operand2 = (operand2 * 10) + 1;
@@ -233,7 +265,7 @@ void tick()
                 break;
             }
 
-            if (buttonPressedStruct.which_one = '=')
+            if (pressLoc.which_one = '=')
             {
                 if (operand2 == 0)
                 {
@@ -282,12 +314,12 @@ void tick()
             }
         }
         // Clears the result and allows the user to perform a new calculation.
-        else if (buttonPressedStruct.depressed == true && buttonPressedStruct.which_one == 'C')
+        else if (pressLoc.depressed == true && pressLoc.which_one == 'C')
         {
             CALC_State = CLR;
         }
         // Allow the user to hit the equals button more than once in a row.
-        else if (buttonPressedStruct.depressed == true && buttonPressedStruct.which_one == '=')
+        else if (pressLoc.depressed == true && pressLoc.which_one == '=')
         {
             CALC_State = Result;
             // displayResult(calculated_result); --THIS MIGHT BE NEEDED, MIGHT BE REDUNDANT.
@@ -295,7 +327,7 @@ void tick()
         break;
     case DIV_0:
         displayDiv0();
-        if (buttonPressedStruct.depressed == true && buttonPressedStruct.which_one == 'C')
+        if (pressLoc.depressed == true && pressLoc.which_one == 'C')
         {
             CALC_State = CLR;
         }
@@ -308,8 +340,8 @@ void tick()
             operator= 'F';
             operand2 = 0;
             calculated_result = 0;
-            buttonPressedStruct.depressed = false;
-            buttonPressedStruct.which_one = 'F';
+            pressLoc.depressed = false;
+            pressLoc.which_one = 'F';
             operator2_specified = false;
             displayResult(0);
             CALC_State = Operand;
@@ -317,7 +349,7 @@ void tick()
         break;
     case Error:
         displayErr();
-        if (buttonPressedStruct.depressed == true && buttonPressedStruct.which_one == 'C')
+        if (pressLoc.depressed == true && pressLoc.which_one == 'C')
         {
             CALC_State = CLR;
         }
