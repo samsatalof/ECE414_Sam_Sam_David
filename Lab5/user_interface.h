@@ -23,6 +23,6 @@ struct buttonPressed // Defines a struct for managing when buttons are pressed.
     bool depressed;
     char which_one;
 };
-void getButton();
+struct buttonPressed getButton();
 
 #endif

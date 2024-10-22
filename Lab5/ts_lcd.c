@@ -15,8 +15,8 @@ bool get_ts_lcd(uint16_t *px, uint16_t *py)
     }
     else
     {
-        *px = (p.x * (ILI9340_TFTWIDTH)) / (touchscrn_width);
-        *py = (p.y * (ILI9340_TFTHEIGHT)) / (touchscrn_height);
+        *px = (p.y * (ILI9340_TFTHEIGHT)) / (touchscrn_height);
+        *py = (p.x * (ILI9340_TFTWIDTH)) / (touchscrn_width);
         return true;
     }
 }

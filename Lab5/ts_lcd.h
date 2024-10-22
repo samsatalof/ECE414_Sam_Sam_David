@@ -19,7 +19,7 @@
 #define Xneg_GPIO 26
 #define Ypos_GPIO 27
 #define Yneg_GPIO 21
-#define touchscrn_width 4100
+#define touchscrn_width 4000
 #define touchscrn_height 3800
 
 // Reads the status of touchscreen, returning true when a finger/stylus is placed on display,

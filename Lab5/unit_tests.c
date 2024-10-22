@@ -27,7 +27,7 @@ int main()
     drawInterface();
     buf[1] = '\0';
     while (1) {
-        getButton(pressLoc);
+        pressLoc = getButton(pressLoc);
         if (pressLoc.depressed) {
             sprintf(buf, "%c", pressLoc.which_one);
             tft_setCursor(10, 10);

@@ -126,7 +126,7 @@ void drawInterface()
 }
 
 // Figure out which button was pressed
-void getButton(struct buttonPressed buttonPressedStruct)
+struct buttonPressed getButton(struct buttonPressed buttonPressedStruct)
 {
     uint16_t *px, *py; // Coordinates on the touchscreen
     uint16_t x, y;
@@ -142,19 +142,19 @@ void getButton(struct buttonPressed buttonPressedStruct)
             // First check which column, then check which row within each column.
             if ((*px > 4) && (*px < 79)) // Column 1
             {
-                if ((*py > 40) && (*py < 85)) // Row 1
+                if ((*py > 155) && (*py < 200)) // Row 1
                 {
                     buttonPressedStruct.which_one = '7';
                 }
-                else if ((*py > 90) && (*py < 135)) // Row 2
+                else if ((*py > 130) && (*py < 150)) // Row 2
                 {
                     buttonPressedStruct.which_one = '4';
                 }
-                else if ((*py > 140) && (*py < 185)) // Row 3
+                else if ((*py > 90) && (*py < 130)) // Row 3
                 {
                     buttonPressedStruct.which_one = '1';
                 }
-                else if ((*py > 190) && (*py < 235)) // Row 4
+                else if ((*py > 15) && (*py < 90)) // Row 4
                 {
                     buttonPressedStruct.which_one = '0';
                 }
@@ -166,19 +166,19 @@ void getButton(struct buttonPressed buttonPressedStruct)
             }
             else if ((*px > 83) && (*px < 158)) // Column 2
             {
-                if ((*py > 40) && (*py < 85)) // Row 1
+                if ((*py > 155) && (*py < 200)) // Row 1
                 {
                     buttonPressedStruct.which_one = '8';
                 }
-                else if ((*py > 90) && (*py < 135)) // Row 2
+                else if ((*py > 130) && (*py < 150)) // Row 2
                 {
                     buttonPressedStruct.which_one = '5';
                 }
-                else if ((*py > 140) && (*py < 185)) // Row 3
+                else if ((*py > 90) && (*py < 130)) // Row 3
                 {
                     buttonPressedStruct.which_one = '2';
                 }
-                else if ((*py > 190) && (*py < 235)) // Row 4
+                else if ((*py > 15) && (*py < 90)) // Row 4
                 {
                     buttonPressedStruct.which_one = 'C';
                 }
@@ -190,19 +190,19 @@ void getButton(struct buttonPressed buttonPressedStruct)
             }
             else if ((*px > 162) && (*px < 237)) // Column 3
             {
-                if ((*py > 40) && (*py < 85)) // Row 1
+                if ((*py > 155) && (*py < 200)) // Row 1
                 {
                     buttonPressedStruct.which_one = '9';
                 }
-                else if ((*py > 90) && (*py < 135)) // Row 2
+                else if ((*py > 130) && (*py < 150)) // Row 2
                 {
                     buttonPressedStruct.which_one = '6';
                 }
-                else if ((*py > 140) && (*py < 185)) // Row 3
+                else if ((*py > 90) && (*py < 130)) // Row 3
                 {
                     buttonPressedStruct.which_one = '3';
                 }
-                else if ((*py > 190) && (*py < 235)) // Row 4
+                else if ((*py > 15) && (*py < 90)) // Row 4
                 {
                     buttonPressedStruct.which_one = '=';
                 }
@@ -214,19 +214,19 @@ void getButton(struct buttonPressed buttonPressedStruct)
             }
             else if ((*px > 241) && (*px < 316)) // Column 4
             {
-                if ((*py > 40) && (*py < 85)) // Row 1
+                if ((*py > 155) && (*py < 200)) // Row 1
                 {
                     buttonPressedStruct.which_one = '+';
                 }
-                else if ((*py > 90) && (*py < 135)) // Row 2
+                else if ((*py > 130) && (*py < 150)) // Row 2
                 {
                     buttonPressedStruct.which_one = '-';
                 }
-                else if ((*py > 140) && (*py < 185)) // Row 3
+                else if ((*py > 90) && (*py < 130)) // Row 3
                 {
                     buttonPressedStruct.which_one = '*';
                 }
-                else if ((*py > 190) && (*py < 235)) // Row 4
+                else if ((*py > 15) && (*py < 90)) // Row 4
                 {
                     buttonPressedStruct.which_one = '/';
                 }
@@ -247,4 +247,6 @@ void getButton(struct buttonPressed buttonPressedStruct)
     {
         buttonPressedStruct.depressed = false;
     }
+
+    return buttonPressedStruct;
 }
