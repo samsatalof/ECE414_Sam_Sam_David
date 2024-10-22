@@ -13,6 +13,36 @@ px = &x;
 py = &y;
 ts_lcd_init(); // init function
 
+// Buffer for the display output of the calculator.
+char outputBuffer[32];
+
+void displayResult(int result)
+{
+
+    sprintf(outputBuffer, "%d", result);
+    tft_setCursor(10, 10);
+    tft_writeString(outputBuffer);
+}
+
+void displayOperator(char operator)
+{
+    sprintf(outputBuffer, "%s", operator);
+    tft_setCursor(10, 10);
+    tft_writeString(outputBuffer);
+}
+
+void displayErr(){
+    sprintf(outputBuffer, "ERROR");
+    tft_setCursor(10, 10);
+    tft_writeString(outputBuffer);
+}
+
+void displayDiv0(){
+    sprintf(outputBuffer, "DIV0");
+    tft_setCursor(10, 10);
+    tft_writeString(outputBuffer);
+}
+
 void drawInterface()
 {
     char buf[2];
