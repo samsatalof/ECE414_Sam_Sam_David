@@ -6,19 +6,10 @@
 #include <stdio.h>
 #include "user_interface.h"
 
-uint16_t *px, *py; // Coordinates on the touchscreen
-uint16_t x, y;
-// Avoids malloc:
-px = &x;
-py = &y;
-ts_lcd_init(); // init function
-
-// Buffer for the display output of the calculator.
-char outputBuffer[32];
-
 void displayResult(int result)
 {
-
+    // Buffer for the display output of the calculator.
+    char outputBuffer[32];
     sprintf(outputBuffer, "%d", result);
     tft_setCursor(10, 10);
     tft_writeString(outputBuffer);
@@ -26,18 +17,24 @@ void displayResult(int result)
 
 void displayOperator(char operator)
 {
+    // Buffer for the display output of the calculator.
+    char outputBuffer[32];
     sprintf(outputBuffer, "%s", operator);
     tft_setCursor(10, 10);
     tft_writeString(outputBuffer);
 }
 
 void displayErr(){
+    // Buffer for the display output of the calculator.
+    char outputBuffer[32];
     sprintf(outputBuffer, "ERROR");
     tft_setCursor(10, 10);
     tft_writeString(outputBuffer);
 }
 
 void displayDiv0(){
+    // Buffer for the display output of the calculator.
+    char outputBuffer[32];
     sprintf(outputBuffer, "DIV0");
     tft_setCursor(10, 10);
     tft_writeString(outputBuffer);
@@ -47,29 +44,31 @@ void drawInterface()
 {
     char buf[2];
     buf[1] = '\0';
+    // Buffer for the display output of the calculator.
+    char outputBuffer[32];
     ts_lcd_init();
 
     // Draw the Buttons:
     // Column 1:
-    tft_drawRoundRect(4, 40, 75, 45, 60, ILI9340_WHITE);
-    tft_drawRoundRect(4, 90, 75, 45, 60, ILI9340_WHITE);
-    tft_drawRoundRect(4, 140, 75, 45, 60, ILI9340_WHITE);
-    tft_drawRoundRect(4, 190, 75, 45, 60, ILI9340_WHITE);
+    tft_drawRoundRect(4, 40, 75, 45, 10, ILI9340_WHITE);
+    tft_drawRoundRect(4, 90, 75, 45, 10, ILI9340_WHITE);
+    tft_drawRoundRect(4, 140, 75, 45, 10, ILI9340_WHITE);
+    tft_drawRoundRect(4, 190, 75, 45, 10, ILI9340_WHITE);
     // Column 2:
-    tft_drawRoundRect(83, 40, 75, 45, 60, ILI9340_WHITE);
-    tft_drawRoundRect(83, 90, 75, 45, 60, ILI9340_WHITE);
-    tft_drawRoundRect(83, 140, 75, 45, 60, ILI9340_WHITE);
-    tft_drawRoundRect(83, 190, 75, 45, 60, ILI9340_RED);
+    tft_drawRoundRect(83, 40, 75, 45, 10, ILI9340_WHITE);
+    tft_drawRoundRect(83, 90, 75, 45, 10, ILI9340_WHITE);
+    tft_drawRoundRect(83, 140, 75, 45, 10, ILI9340_WHITE);
+    tft_drawRoundRect(83, 190, 75, 45, 10, ILI9340_RED);
     // Column 3:
-    tft_drawRoundRect(162, 40, 75, 45, 60, ILI9340_WHITE);
-    tft_drawRoundRect(162, 90, 75, 45, 60, ILI9340_WHITE);
-    tft_drawRoundRect(162, 140, 75, 45, 60, ILI9340_WHITE);
-    tft_drawRoundRect(162, 190, 75, 45, 60, ILI9340_BLUE);
+    tft_drawRoundRect(162, 40, 75, 45, 10, ILI9340_WHITE);
+    tft_drawRoundRect(162, 90, 75, 45, 10, ILI9340_WHITE);
+    tft_drawRoundRect(162, 140, 75, 45, 10, ILI9340_WHITE);
+    tft_drawRoundRect(162, 190, 75, 45, 10, ILI9340_BLUE);
     // Column 4:
-    tft_drawRoundRect(241, 40, 75, 45, 60, ILI9340_YELLOW);
-    tft_drawRoundRect(241, 90, 75, 45, 60, ILI9340_YELLOW);
-    tft_drawRoundRect(241, 140, 75, 45, 60, ILI9340_YELLOW);
-    tft_drawRoundRect(241, 190, 75, 45, 60, ILI9340_YELLOW);
+    tft_drawRoundRect(241, 40, 75, 45, 10, ILI9340_YELLOW);
+    tft_drawRoundRect(241, 90, 75, 45, 10, ILI9340_YELLOW);
+    tft_drawRoundRect(241, 140, 75, 45, 10, ILI9340_YELLOW);
+    tft_drawRoundRect(241, 190, 75, 45, 10, ILI9340_YELLOW);
 
     // Print the symbols onto the buttons:
     // Column 1:
@@ -127,8 +126,13 @@ void drawInterface()
 }
 
 // Figure out which button was pressed
-struct buttonPressed getButton()
+void getButton(struct buttonPressed buttonPressedStruct)
 {
+    uint16_t *px, *py; // Coordinates on the touchscreen
+    uint16_t x, y;
+    // Avoids malloc:
+    px = &x;
+    py = &y;
     if (get_ts_lcd(px, py))
     {
         if ((px != NULL) && (py != NULL)) // Checks the pointers aren't NULL
@@ -136,21 +140,21 @@ struct buttonPressed getButton()
             buttonPressedStruct.depressed = true;
 
             // First check which column, then check which row within each column.
-            if ((px > 4) && (px < 79)) // Column 1
+            if ((*px > 4) && (*px < 79)) // Column 1
             {
-                if ((py > 40) && (py < 85)) // Row 1
+                if ((*py > 40) && (*py < 85)) // Row 1
                 {
                     buttonPressedStruct.which_one = '7';
                 }
-                else if ((py > 90) && (py < 135)) // Row 2
+                else if ((*py > 90) && (*py < 135)) // Row 2
                 {
                     buttonPressedStruct.which_one = '4';
                 }
-                else if ((py > 140) && (py < 185)) // Row 3
+                else if ((*py > 140) && (*py < 185)) // Row 3
                 {
                     buttonPressedStruct.which_one = '1';
                 }
-                else if ((py > 190) && (py < 235)) // Row 4
+                else if ((*py > 190) && (*py < 235)) // Row 4
                 {
                     buttonPressedStruct.which_one = '0';
                 }
@@ -160,21 +164,21 @@ struct buttonPressed getButton()
                     buttonPressedStruct.which_one = 'F'; // Failure code --potential unused
                 }
             }
-            else if ((px > 83) && (px < 158)) // Column 2
+            else if ((*px > 83) && (*px < 158)) // Column 2
             {
-                if ((py > 40) && (py < 85)) // Row 1
+                if ((*py > 40) && (*py < 85)) // Row 1
                 {
                     buttonPressedStruct.which_one = '8';
                 }
-                else if ((py > 90) && (py < 135)) // Row 2
+                else if ((*py > 90) && (*py < 135)) // Row 2
                 {
                     buttonPressedStruct.which_one = '5';
                 }
-                else if ((py > 140) && (py < 185)) // Row 3
+                else if ((*py > 140) && (*py < 185)) // Row 3
                 {
                     buttonPressedStruct.which_one = '2';
                 }
-                else if ((py > 190) && (py < 235)) // Row 4
+                else if ((*py > 190) && (*py < 235)) // Row 4
                 {
                     buttonPressedStruct.which_one = 'C';
                 }
@@ -184,21 +188,21 @@ struct buttonPressed getButton()
                     buttonPressedStruct.which_one = 'F'; // Failure code --potential unused
                 }
             }
-            else if ((px > 162) && (px < 237)) // Column 3
+            else if ((*px > 162) && (*px < 237)) // Column 3
             {
-                if ((py > 40) && (py < 85)) // Row 1
+                if ((*py > 40) && (*py < 85)) // Row 1
                 {
                     buttonPressedStruct.which_one = '9';
                 }
-                else if ((py > 90) && (py < 135)) // Row 2
+                else if ((*py > 90) && (*py < 135)) // Row 2
                 {
                     buttonPressedStruct.which_one = '6';
                 }
-                else if ((py > 140) && (py < 185)) // Row 3
+                else if ((*py > 140) && (*py < 185)) // Row 3
                 {
                     buttonPressedStruct.which_one = '3';
                 }
-                else if ((py > 190) && (py < 235)) // Row 4
+                else if ((*py > 190) && (*py < 235)) // Row 4
                 {
                     buttonPressedStruct.which_one = '=';
                 }
@@ -208,21 +212,21 @@ struct buttonPressed getButton()
                     buttonPressedStruct.which_one = 'F'; // Failure code --potential unused
                 }
             }
-            else if ((px > 241) && (px < 316)) // Column 4
+            else if ((*px > 241) && (*px < 316)) // Column 4
             {
-                if ((py > 40) && (py < 85)) // Row 1
+                if ((*py > 40) && (*py < 85)) // Row 1
                 {
                     buttonPressedStruct.which_one = '+';
                 }
-                else if ((py > 90) && (py < 135)) // Row 2
+                else if ((*py > 90) && (*py < 135)) // Row 2
                 {
                     buttonPressedStruct.which_one = '-';
                 }
-                else if ((py > 140) && (py < 185)) // Row 3
+                else if ((*py > 140) && (*py < 185)) // Row 3
                 {
                     buttonPressedStruct.which_one = '*';
                 }
-                else if ((py > 190) && (py < 235)) // Row 4
+                else if ((*py > 190) && (*py < 235)) // Row 4
                 {
                     buttonPressedStruct.which_one = '/';
                 }
