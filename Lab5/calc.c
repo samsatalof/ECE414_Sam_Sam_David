@@ -34,12 +34,12 @@ uint32_t calculated_result;
 bool operator2_specified;
 struct buttonPressed pressLoc;
 
-
 #define ALARM_NUM 0
 #define ALARM_IRQ timer_hardware_alarm_get_irq_num(timer_hw, ALARM_NUM)
 static volatile bool alarm_fired;
 
-void timer_ISR () {
+void timer_ISR()
+{
     // Clear the alarm irq
     hw_clear_bits(&timer_hw->intr, 1u << ALARM_NUM);
 
@@ -66,7 +66,8 @@ int main()
     // Write the lower 32 bits of the target time to the alarm which
     // will arm it
     timer_hw->alarm[ALARM_NUM] = (uint32_t)target;
-    while(1);
+    while (1)
+        ;
 }
 
 bool overflowAdd(int original, int changeBy)
@@ -129,35 +130,61 @@ void tick()
         if (pressLoc.depressed == true)
         {
             // Append each new digit to the operand.
-            // TODO --implement check for overflow if the user types too many digits into the calc.
             switch (pressLoc.which_one)
             {
             case '1':
-                operand1 = (operand1 * 10) + 1;
+                if (!overflowAdd(operand1, ((operand1 * 10) + 1) - operand1))
+                {
+                    operand1 = (operand1 * 10) + 1;
+                }
                 break;
             case '2':
-                operand1 = (operand1 * 10) + 2;
+                if (!overflowAdd(operand1, ((operand1 * 10) + 2) - operand1))
+                {
+                    operand1 = (operand1 * 10) + 2;
+                }
                 break;
             case '3':
-                operand1 = (operand1 * 10) + 3;
+                if (!overflowAdd(operand1, ((operand1 * 10) + 3) - operand1))
+                {
+                    operand1 = (operand1 * 10) + 3;
+                }
                 break;
             case '4':
-                operand1 = (operand1 * 10) + 4;
+                if (!overflowAdd(operand1, ((operand1 * 10) + 4) - operand1))
+                {
+                    operand1 = (operand1 * 10) + 4;
+                }
                 break;
             case '5':
-                operand1 = (operand1 * 10) + 5;
+                if (!overflowAdd(operand1, ((operand1 * 10) + 5) - operand1))
+                {
+                    operand1 = (operand1 * 10) + 5;
+                }
                 break;
             case '6':
-                operand1 = (operand1 * 10) + 6;
+                if (!overflowAdd(operand1, ((operand1 * 10) + 6) - operand1))
+                {
+                    operand1 = (operand1 * 10) + 6;
+                }
                 break;
             case '7':
-                operand1 = (operand1 * 10) + 7;
-                break;
+                if (!overflowAdd(operand1, ((operand1 * 10) + 7) - operand1))
+                {
+                    operand1 = (operand1 * 10) + 7;
+                    break;
+                }
             case '8':
-                operand1 = (operand1 * 10) + 8;
+                if (!overflowAdd(operand1, ((operand1 * 10) + 8) - operand1))
+                {
+                    operand1 = (operand1 * 10) + 8;
+                }
                 break;
             case '9':
-                operand1 = (operand1 * 10) + 9;
+                if (!overflowAdd(operand1, ((operand1 * 10) + 9) - operand1))
+                {
+                    operand1 = (operand1 * 10) + 9;
+                }
                 break;
             default:
                 // Do nothing if a non-numerical button has been pressed.
@@ -225,40 +252,58 @@ void tick()
             switch (pressLoc.which_one)
             {
             case '1':
-                operand2 = (operand2 * 10) + 1;
-                operator2_specified = true;
+                if (!overflowAdd(operand2, ((operand2 * 10) + 1) - operand2))
+                {
+                    operand2 = (operand2 * 10) + 1;
+                }
                 break;
             case '2':
-                operand2 = (operand2 * 10) + 2;
-                operator2_specified = true;
+                if (!overflowAdd(operand2, ((operand2 * 10) + 2) - operand2))
+                {
+                    operand2 = (operand2 * 10) + 2;
+                }
                 break;
             case '3':
-                operand2 = (operand2 * 10) + 3;
-                operator2_specified = true;
+                if (!overflowAdd(operand2, ((operand2 * 10) + 3) - operand2))
+                {
+                    operand2 = (operand2 * 10) + 3;
+                }
                 break;
             case '4':
-                operand2 = (operand2 * 10) + 4;
-                operator2_specified = true;
+                if (!overflowAdd(operand2, ((operand2 * 10) + 4) - operand2))
+                {
+                    operand2 = (operand2 * 10) + 4;
+                }
                 break;
             case '5':
-                operand2 = (operand2 * 10) + 5;
-                operator2_specified = true;
+                if (!overflowAdd(operand2, ((operand2 * 10) + 5) - operand2))
+                {
+                    operand2 = (operand2 * 10) + 5;
+                }
                 break;
             case '6':
-                operand2 = (operand2 * 10) + 6;
-                operator2_specified = true;
+                if (!overflowAdd(operand2, ((operand2 * 10) + 6) - operand2))
+                {
+                    operand2 = (operand2 * 10) + 6;
+                }
                 break;
             case '7':
-                operand2 = (operand2 * 10) + 7;
-                operator2_specified = true;
-                break;
+                if (!overflowAdd(operand2, ((operand2 * 10) + 7) - operand2))
+                {
+                    operand2 = (operand2 * 10) + 7;
+                    break;
+                }
             case '8':
-                operand2 = (operand2 * 10) + 8;
-                operator2_specified = true;
+                if (!overflowAdd(operand2, ((operand2 * 10) + 8) - operand2))
+                {
+                    operand2 = (operand2 * 10) + 8;
+                }
                 break;
             case '9':
-                operand2 = (operand2 * 10) + 9;
-                operator2_specified = true;
+                if (!overflowAdd(operand2, ((operand2 * 10) + 9) - operand2))
+                {
+                    operand2 = (operand2 * 10) + 9;
+                }
                 break;
             default:
                 // Do nothing if a non-numerical button has been pressed.
@@ -288,17 +333,26 @@ void tick()
                  // TODO NEED TO PRINT THE RESULT TO THE SCREEN!
         if (operator== '+')
         {
-            calculated_result = operand1 + operand2;
+            if (!overflowAdd(operand1, operand2))
+            {
+                calculated_result = operand1 + operand2;
+            }
             displayResult(calculated_result);
         }
         else if (operator== '-')
         {
-            calculated_result = operand1 - operand2;
+            if (!overflowSub(operand1, operand2))
+            {
+                calculated_result = operand1 - operand2;
+            }
             displayResult(calculated_result);
         }
         else if (operator== '*')
         {
-            calculated_result = operand1 * operand2;
+            if (!overflowMult(operand1, operand2))
+            {
+                calculated_result = operand1 * operand2;
+            }
             displayResult(calculated_result);
         }
         else if (operator== '/')
@@ -309,7 +363,10 @@ void tick()
             }
             else
             {
-                calculated_result == operand1 / operand2;
+                if (!overflowDiv(operand1, operand2))
+                {
+                    calculated_result == operand1 / operand2;
+                }
                 displayResult(calculated_result);
             }
         }
