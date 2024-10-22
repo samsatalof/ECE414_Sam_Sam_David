@@ -27,12 +27,26 @@ enum CALC_States
 };
 enum CALC_States CALC_State; // Create an instance of the enum.
 
-uint32_t operand1;
-uint32_t operand2;
+int32_t operand1;  
+int32_t operand2;  
 char operator;
 uint32_t calculated_result;
 bool operator2_specified;
 struct buttonPressed pressLoc;
+
+if (pressLoc.which_one == '-') {
+    operand1 = -operand1;
+    displayResult(operand1); 
+} else {
+    operand1 = (operand1 * 10) + 1;
+}
+
+if (pressLoc.which_one == '-') {
+    operand2 = -operand2;
+    displayResult(operand2); 
+} else {
+    operand2 = (operand2 * 10) + 1;
+}
 
 
 #define ALARM_NUM 0
