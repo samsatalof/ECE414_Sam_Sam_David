@@ -9,7 +9,7 @@ bool get_ts_lcd(uint16_t *px, uint16_t *py)
 
     struct TSPoint p;
     getPoint(&p);
-    if (!(p.z < 20000))
+    if (!(p.z < 8000))
     {
         return false;
     }

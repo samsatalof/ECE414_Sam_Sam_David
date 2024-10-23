@@ -37,10 +37,11 @@ enum CALC_States CALC_State; // Create an instance of the enum.
 int32_t operand1;
 int32_t operand2;
 char operator;
+char operatorNext;
 uint32_t calculated_result;
 bool operator2_specified, goToOperator;
 struct buttonPressed pressLoc;
-//static volatile bool alarm_fired;
+// static volatile bool alarm_fired;
 
 bool overflowAdd(int original, int changeBy)
 {
@@ -104,6 +105,14 @@ void tick()
             // Append each new digit to the operand.
             switch (pressLoc.which_one)
             {
+            case '0':
+                if (!overflowAdd(operand1, ((operand1 * 10)) - operand1))
+                {
+                    operand1 = (operand1 * 10);
+                    displayResult(operand1);
+                    CALC_State = Operand;
+                }
+                break;
             case '1':
                 if (!overflowAdd(operand1, ((operand1 * 10) + 1) - operand1))
                 {
@@ -191,6 +200,7 @@ void tick()
         {
             CALC_State = Operator;
             operator= pressLoc.which_one;
+            displayOperator(operator);
         }
         break;
     case Operator:
@@ -204,13 +214,66 @@ void tick()
             {
                 CALC_State = Operator;
                 operator= pressLoc.which_one;
+                displayOperator(operator);
             }
             // Allow the operator to be continuously overwritten until another operand is input.
-            if ((pressLoc.which_one == '1' || pressLoc.which_one == '2' || pressLoc.which_one == '3' || pressLoc.which_one == '4' || pressLoc.which_one == '5' || pressLoc.which_one == '6' || pressLoc.which_one == '7' || pressLoc.which_one == '8' || pressLoc.which_one == '9'))
+            if ((pressLoc.which_one == '0' || pressLoc.which_one == '1' || pressLoc.which_one == '2' || pressLoc.which_one == '3' || pressLoc.which_one == '4' || pressLoc.which_one == '5' || pressLoc.which_one == '6' || pressLoc.which_one == '7' || pressLoc.which_one == '8' || pressLoc.which_one == '9'))
             {
-                displayOperator(operator);
-                CALC_State = Operand_2;
-                operand2 = pressLoc.which_one;
+                switch (pressLoc.which_one)
+                {
+                case '0':
+                    operand2 = 0;
+                    displayResult(operand2);
+                    CALC_State = Operand_2;
+                    break;
+                case '1':
+                    operand2 = 1;
+                    displayResult(operand2);
+                    CALC_State = Operand_2;
+                    break;
+                case '2':
+                    operand2 = 2;
+                    displayResult(operand2);
+                    CALC_State = Operand_2;
+                    break;
+                case '3':
+                    operand2 = 3;
+                    displayResult(operand2);
+                    CALC_State = Operand_2;
+                    break;
+                case '4':
+                    operand2 = 4;
+                    displayResult(operand2);
+                    CALC_State = Operand_2;
+                    break;
+                case '5':
+                    operand2 = 5;
+                    displayResult(operand2);
+                    CALC_State = Operand_2;
+                    break;
+                case '6':
+                    operand2 = 6;
+                    displayResult(operand2);
+                    CALC_State = Operand_2;
+                    break;
+                case '7':
+                    operand2 = 7;
+                    displayResult(operand2);
+                    CALC_State = Operand_2;
+                case '8':
+                    operand2 = 8;
+                    displayResult(operand2);
+                    CALC_State = Operand_2;
+                    break;
+                case '9':
+                    operand2 = 9;
+                    displayResult(operand2);
+                    CALC_State = Operand_2;
+                    break;
+                default:
+                    // Do nothing if a non-numerical button has been pressed.
+                    break;
+                }
             }
         }
         break;
@@ -225,6 +288,14 @@ void tick()
             // Append each new digit to the operand.
             switch (pressLoc.which_one)
             {
+            case '0':
+                if (!overflowAdd(operand1, ((operand1 * 10)) - operand1))
+                {
+                    operand1 = (operand1 * 10);
+                    displayResult(operand1);
+                    CALC_State = Operand;
+                }
+                break;
             case '1':
                 if (!overflowAdd(operand2, ((operand2 * 10) + 1) - operand2))
                 {
@@ -297,8 +368,8 @@ void tick()
             }
             else if ((pressLoc.which_one == '+' || pressLoc.which_one == '-' || pressLoc.which_one == '*' || pressLoc.which_one == '/'))
             {
-                CALC_State = Operator;
-                operator= pressLoc.which_one;
+                CALC_State = Result;
+                operatorNext = pressLoc.which_one;
                 goToOperator = true;
             }
             else // Allow the user to continue their input of the second operand.
@@ -318,9 +389,15 @@ void tick()
                 displayResult(calculated_result);
                 if (goToOperator)
                 {
+                    operator = operatorNext;
                     CALC_State = Operator;
                     goToOperator = false;
                     operand1 = calculated_result;
+                    displayOperator(operator);
+                }
+                else
+                {
+                    operator= 'F';
                 }
             }
             else
@@ -338,7 +415,13 @@ void tick()
                 {
                     CALC_State = Operator;
                     goToOperator = false;
+                    operator = operatorNext;
                     operand1 = calculated_result;
+                    displayOperator(operator);
+                }
+                else
+                {
+                    operator= 'F';
                 }
             }
             else
@@ -346,7 +429,7 @@ void tick()
                 CALC_State = Error;
             }
         }
-        else if (operator == '*')
+        else if (operator== '*')
         {
             if (!overflowMult(operand1, operand2))
             {
@@ -356,7 +439,13 @@ void tick()
                 {
                     CALC_State = Operator;
                     goToOperator = false;
+                    operator = operatorNext;
                     operand1 = calculated_result;
+                    displayOperator(operator);
+                }
+                else
+                {
+                    operator= 'F';
                 }
             }
             else
@@ -364,7 +453,7 @@ void tick()
                 CALC_State = Error;
             }
         }
-        else if (operator == '/')
+        else if (operator== '/')
         {
             if (operand2 == 0)
             {
@@ -380,7 +469,13 @@ void tick()
                     {
                         CALC_State = Operator;
                         goToOperator = false;
+                        operator = operatorNext;
                         operand1 = calculated_result;
+                        displayOperator(operator);
+                    }
+                    else
+                    {
+                        operator= 'F';
                     }
                 }
                 else
@@ -388,6 +483,13 @@ void tick()
                     CALC_State = Error;
                 }
             }
+        }
+        if (pressLoc.depressed && (pressLoc.which_one == '+' || pressLoc.which_one == '-' || pressLoc.which_one == '*' || pressLoc.which_one == '/'))
+        {
+            CALC_State = Operator;
+            operator= pressLoc.which_one;
+            operand1 = calculated_result;
+            displayOperator(operator);
         }
         // Clears the result and allows the user to perform a new calculation.
         if (pressLoc.depressed == true && pressLoc.which_one == 'C')
@@ -412,7 +514,7 @@ void tick()
         // If the clear button is pressed, reset the calculator registers and return to the initial state.
         operand1 = 0;
         operator= 'F';
-        operand2 = 1;
+        operand2 = 0;
         calculated_result = 0;
         displayResult(0);
         CALC_State = Operand;
@@ -465,8 +567,8 @@ uint32_t t1, t2, t3, t4;
 uint32_t gameTimer = 300;
 #define DEBOUNCE_PD_MS 200
 
-
-int main() {
+int main()
+{
     drawInterface();
     CALC_State = CLR;
     t1 = timer_read();
