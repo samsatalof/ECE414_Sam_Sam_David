@@ -146,11 +146,11 @@ struct buttonPressed getButton(struct buttonPressed buttonPressedStruct)
                 {
                     buttonPressedStruct.which_one = '7';
                 }
-                else if ((*py > 130) && (*py < 150)) // Row 2
+                else if ((*py > 125) && (*py < 150)) // Row 2
                 {
                     buttonPressedStruct.which_one = '4';
                 }
-                else if ((*py > 90) && (*py < 130)) // Row 3
+                else if ((*py > 90) && (*py < 125)) // Row 3
                 {
                     buttonPressedStruct.which_one = '1';
                 }
@@ -170,11 +170,11 @@ struct buttonPressed getButton(struct buttonPressed buttonPressedStruct)
                 {
                     buttonPressedStruct.which_one = '8';
                 }
-                else if ((*py > 130) && (*py < 150)) // Row 2
+                else if ((*py > 125) && (*py < 150)) // Row 2
                 {
                     buttonPressedStruct.which_one = '5';
                 }
-                else if ((*py > 90) && (*py < 130)) // Row 3
+                else if ((*py > 90) && (*py < 125)) // Row 3
                 {
                     buttonPressedStruct.which_one = '2';
                 }
@@ -194,11 +194,11 @@ struct buttonPressed getButton(struct buttonPressed buttonPressedStruct)
                 {
                     buttonPressedStruct.which_one = '9';
                 }
-                else if ((*py > 130) && (*py < 150)) // Row 2
+                else if ((*py > 125) && (*py < 150)) // Row 2
                 {
                     buttonPressedStruct.which_one = '6';
                 }
-                else if ((*py > 90) && (*py < 130)) // Row 3
+                else if ((*py > 90) && (*py < 125)) // Row 3
                 {
                     buttonPressedStruct.which_one = '3';
                 }
@@ -218,11 +218,11 @@ struct buttonPressed getButton(struct buttonPressed buttonPressedStruct)
                 {
                     buttonPressedStruct.which_one = '+';
                 }
-                else if ((*py > 130) && (*py < 150)) // Row 2
+                else if ((*py > 125) && (*py < 150)) // Row 2
                 {
                     buttonPressedStruct.which_one = '-';
                 }
-                else if ((*py > 90) && (*py < 130)) // Row 3
+                else if ((*py > 90) && (*py < 125)) // Row 3
                 {
                     buttonPressedStruct.which_one = '*';
                 }

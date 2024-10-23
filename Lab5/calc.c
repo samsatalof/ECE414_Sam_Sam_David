@@ -12,7 +12,10 @@ David Green, Sam Satalof, Sam Owens */
 #include "TouchScreen.h"
 #include "hardware/adc.h"
 #include "user_interface.h"
+#include "hardware/timer.h"
+#include "hardware/irq.h"
 #include <limits.h>
+
 
 // FSM States:
 enum CALC_States
@@ -27,11 +30,11 @@ enum CALC_States
 };
 enum CALC_States CALC_State; // Create an instance of the enum.
 
-int32_t operand1;  
-int32_t operand2;  
+int32_t operand1;
+int32_t operand2;
 char operator;
 uint32_t calculated_result;
-bool operator2_specified;
+bool operator2_specified, goToOperator;
 struct buttonPressed pressLoc;
 
 #define ALARM_NUM 0
@@ -41,7 +44,7 @@ static volatile bool alarm_fired;
 void timer_ISR()
 {
     // Clear the alarm irq
-    hw_clear_bits(&timer_hw->intr, 1u << ALARM_NUM);
+    hw_clear_bits(&timer_hw->intr, 1u);
 
     // Assume alarm 0 has fired
     printf("Alarm IRQ fired\n");
@@ -51,7 +54,7 @@ void timer_ISR()
 int main()
 {
     // Enable the interrupt for our alarm (the timer outputs 4 alarm irqs)
-    hw_set_bits(&timer_hw->inte, 1u << ALARM_NUM);
+    hw_set_bits(&timer_hw->inte, 1u);
     // Set irq handler for alarm irq
     irq_set_exclusive_handler(ALARM_IRQ, timer_ISR); // Tells the Pico that ALARM_IRQ is an ISR.
     // Enable the alarm irq
@@ -66,8 +69,7 @@ int main()
     // Write the lower 32 bits of the target time to the alarm which
     // will arm it
     timer_hw->alarm[ALARM_NUM] = (uint32_t)target;
-    while (1)
-        ;
+    while (1);
 }
 
 bool overflowAdd(int original, int changeBy)
@@ -136,62 +138,78 @@ void tick()
                 if (!overflowAdd(operand1, ((operand1 * 10) + 1) - operand1))
                 {
                     operand1 = (operand1 * 10) + 1;
+                    displayResult(operand1);
+                    CALC_State = Operand;
                 }
                 break;
             case '2':
                 if (!overflowAdd(operand1, ((operand1 * 10) + 2) - operand1))
                 {
                     operand1 = (operand1 * 10) + 2;
+                    displayResult(operand1);
+                    CALC_State = Operand;
                 }
                 break;
             case '3':
                 if (!overflowAdd(operand1, ((operand1 * 10) + 3) - operand1))
                 {
                     operand1 = (operand1 * 10) + 3;
+                    displayResult(operand1);
+                    CALC_State = Operand;
                 }
                 break;
             case '4':
                 if (!overflowAdd(operand1, ((operand1 * 10) + 4) - operand1))
                 {
                     operand1 = (operand1 * 10) + 4;
+                    displayResult(operand1);
+                    CALC_State = Operand;
                 }
                 break;
             case '5':
                 if (!overflowAdd(operand1, ((operand1 * 10) + 5) - operand1))
                 {
                     operand1 = (operand1 * 10) + 5;
+                    displayResult(operand1);
+                    CALC_State = Operand;
                 }
                 break;
             case '6':
                 if (!overflowAdd(operand1, ((operand1 * 10) + 6) - operand1))
                 {
                     operand1 = (operand1 * 10) + 6;
+                    displayResult(operand1);
+                    CALC_State = Operand;
                 }
                 break;
             case '7':
                 if (!overflowAdd(operand1, ((operand1 * 10) + 7) - operand1))
                 {
                     operand1 = (operand1 * 10) + 7;
+                    displayResult(operand1);
+                    CALC_State = Operand;
                     break;
                 }
             case '8':
                 if (!overflowAdd(operand1, ((operand1 * 10) + 8) - operand1))
                 {
                     operand1 = (operand1 * 10) + 8;
+                    displayResult(operand1);
+                    CALC_State = Operand;
                 }
                 break;
             case '9':
                 if (!overflowAdd(operand1, ((operand1 * 10) + 9) - operand1))
                 {
                     operand1 = (operand1 * 10) + 9;
+                    displayResult(operand1);
+                    CALC_State = Operand;
                 }
                 break;
             default:
                 // Do nothing if a non-numerical button has been pressed.
                 break;
             }
-            displayResult(operand1);
-            CALC_State = Operand;
         }
         // If the clear button is pressed, move to clear state.
         if (pressLoc.depressed == true && pressLoc.which_one == 'C')
@@ -199,9 +217,10 @@ void tick()
             CALC_State = CLR;
         }
         // If an operand already has been input and a new operator has been entered, move to the operator state.
-        if (pressLoc.depressed == true && (pressLoc.which_one == '+' || pressLoc.which_one == '-' || pressLoc.which_one == '*' || pressLoc.which_one == '/'))
+        if ((pressLoc.depressed == true) && (pressLoc.which_one == '+' || pressLoc.which_one == '-' || pressLoc.which_one == '*' || pressLoc.which_one == '/'))
         {
             CALC_State = Operator;
+            operator= pressLoc.which_one;
         }
         break;
     case Operator:
@@ -211,32 +230,17 @@ void tick()
         }
         if (pressLoc.depressed == true)
         {
-            if (pressLoc.which_one == '+')
+            if ((pressLoc.depressed == true) && (pressLoc.which_one == '+' || pressLoc.which_one == '-' || pressLoc.which_one == '*' || pressLoc.which_one == '/'))
             {
-                operator= '+';
-            }
-            else if (pressLoc.which_one == '-')
-            {
-                operator= '-';
-            }
-            else if (pressLoc.which_one == '*')
-            {
-                operator= '*';
-            }
-            else if (pressLoc.which_one == '/')
-            {
-                operator= '/';
+                CALC_State = Operator;
+                operator= pressLoc.which_one;
             }
             // Allow the operator to be continuously overwritten until another operand is input.
-            if (operator2_specified == false && (pressLoc.which_one == '1' || pressLoc.which_one == '2' || pressLoc.which_one == '3' || pressLoc.which_one == '4' || pressLoc.which_one == '5' || pressLoc.which_one == '6' || pressLoc.which_one == '7' || pressLoc.which_one == '8' || pressLoc.which_one == '9'))
+            if ((pressLoc.which_one == '1' || pressLoc.which_one == '2' || pressLoc.which_one == '3' || pressLoc.which_one == '4' || pressLoc.which_one == '5' || pressLoc.which_one == '6' || pressLoc.which_one == '7' || pressLoc.which_one == '8' || pressLoc.which_one == '9'))
             {
                 displayOperator(operator);
                 CALC_State = Operand_2;
-            }
-            else if (operator2_specified == false)
-            {
-                displayOperator(operator);
-                CALC_State = Operator;
+                operand2 = pressLoc.which_one;
             }
         }
         break;
@@ -321,6 +325,12 @@ void tick()
                     CALC_State = Result;
                 }
             }
+            else if ((pressLoc.which_one == '+' || pressLoc.which_one == '-' || pressLoc.which_one == '*' || pressLoc.which_one == '/'))
+            {
+                CALC_State = Operator;
+                operator= pressLoc.which_one;
+                goToOperator = true;
+            }
             else // Allow the user to continue their input of the second operand.
             {
                 displayResult(operand2);
@@ -329,31 +339,60 @@ void tick()
         }
         break;
         // Performs the calculation.
-    case Result: // TODO NEED TO IMPLEMENT OVERFLOW CHECKING!
-                 // TODO NEED TO PRINT THE RESULT TO THE SCREEN!
+    case Result:
         if (operator== '+')
         {
             if (!overflowAdd(operand1, operand2))
             {
                 calculated_result = operand1 + operand2;
+                displayResult(calculated_result);
+                if (goToOperator)
+                {
+                    CALC_State = Operator;
+                    goToOperator = false;
+                    operand1 = calculated_result;
+                }
             }
-            displayResult(calculated_result);
+            else
+            {
+                CALC_State = Error;
+            }
         }
         else if (operator== '-')
         {
             if (!overflowSub(operand1, operand2))
             {
                 calculated_result = operand1 - operand2;
+                displayResult(calculated_result);
+                if (goToOperator)
+                {
+                    CALC_State = Operator;
+                    goToOperator = false;
+                    operand1 = calculated_result;
+                }
             }
-            displayResult(calculated_result);
+            else
+            {
+                CALC_State = Error;
+            }
         }
         else if (operator== '*')
         {
             if (!overflowMult(operand1, operand2))
             {
                 calculated_result = operand1 * operand2;
+                displayResult(calculated_result);
+                if (goToOperator)
+                {
+                    CALC_State = Operator;
+                    goToOperator = false;
+                    operand1 = calculated_result;
+                }
             }
-            displayResult(calculated_result);
+            else
+            {
+                CALC_State = Error;
+            }
         }
         else if (operator== '/')
         {
@@ -366,12 +405,22 @@ void tick()
                 if (!overflowDiv(operand1, operand2))
                 {
                     calculated_result == operand1 / operand2;
+                    displayResult(calculated_result);
+                    if (goToOperator)
+                    {
+                        CALC_State = Operator;
+                        goToOperator = false;
+                        operand1 = calculated_result;
+                    }
                 }
-                displayResult(calculated_result);
+                else
+                {
+                    CALC_State = Error;
+                }
             }
         }
         // Clears the result and allows the user to perform a new calculation.
-        else if (pressLoc.depressed == true && pressLoc.which_one == 'C')
+        if (pressLoc.depressed == true && pressLoc.which_one == 'C')
         {
             CALC_State = CLR;
         }
@@ -391,18 +440,13 @@ void tick()
         break;
     case CLR:
         // If the clear button is pressed, reset the calculator registers and return to the initial state.
-        if (clr_pressed() == true)
-        {
-            operand1 = 0;
-            operator= 'F';
-            operand2 = 0;
-            calculated_result = 0;
-            pressLoc.depressed = false;
-            pressLoc.which_one = 'F';
-            operator2_specified = false;
-            displayResult(0);
-            CALC_State = Operand;
-        }
+        operand1 = 0;
+        operator= 'F';
+        operand2 = 0;
+        calculated_result = 0;
+        displayResult(0);
+        CALC_State = Operand;
+        goToOperator = false;
         break;
     case Error:
         displayErr();
