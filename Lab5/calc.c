@@ -38,14 +38,14 @@ int32_t operand1;
 int32_t operand2;
 char operator;
 char operatorNext;
-uint32_t calculated_result;
+int32_t calculated_result;
 bool operator2_specified, goToOperator;
 struct buttonPressed pressLoc;
 // static volatile bool alarm_fired;
 
 bool overflowAdd(int original, int changeBy)
 {
-    if ((changeBy > 0) && (original > INT_MAX - changeBy))
+    if ((changeBy > 0) && (original < (INT_MAX - changeBy)))
     {
         CALC_State = Error;
         return true;
@@ -58,7 +58,7 @@ bool overflowAdd(int original, int changeBy)
 
 bool overflowSub(int original, int changeBy)
 {
-    if ((changeBy < 0) && (original > INT_MAX + changeBy))
+    if ((changeBy > 0) && ((original - changeBy) > INT_MIN))
     {
         CALC_State = Error;
         return true;
@@ -463,7 +463,7 @@ void tick()
             {
                 if (!overflowDiv(operand1, operand2))
                 {
-                    calculated_result == operand1 / operand2;
+                    calculated_result = operand1 / operand2;
                     displayResult(calculated_result);
                     if (goToOperator)
                     {
