@@ -17,12 +17,13 @@ void displayOperator(char operator);
 
 void displayDiv0();
 void displayErr();
+void clearScreen();
 
 struct buttonPressed // Defines a struct for managing when buttons are pressed.
 {
     bool depressed;
     char which_one;
 };
-struct buttonPressed getButton();
+struct buttonPressed getButton(struct buttonPressed buttonPressedStruct);
 
 #endif

@@ -24,16 +24,19 @@ int main()
     // drawInterface();
     // displayDiv0();
     // displayErr();
+    // displayResult(2048);
+    // displayOperator('+');
+    // clearScreen();
 
     // Unit Test T:
-    // drawInterface();
-    // buf[1] = '\0';
-    // while (1) {
-    //     pressLoc = getButton(pressLoc);
-    //     if (pressLoc.depressed) {
-    //         sprintf(buf, "%c", pressLoc.which_one);
-    //         tft_setCursor(10, 10);
-    //         tft_writeString(buf);
-    //     }
-    // }
+    drawInterface();
+    buf[1] = '\0';
+    while (1) {
+        pressLoc = getButton(pressLoc);
+        if (pressLoc.depressed) {
+            sprintf(buf, "%c", pressLoc.which_one);
+            tft_setCursor(10, 10);
+            tft_writeString(buf);
+        }
+    }
 }

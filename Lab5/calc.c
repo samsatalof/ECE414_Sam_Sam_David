@@ -8,14 +8,18 @@ David Green, Sam Satalof, Sam Owens */
 #include <stdint.h>
 #include "pico/stdlib.h"
 #include "ts_lcd.h"
+#include "timer.h"
 #include "TFTMaster.h"
 #include "TouchScreen.h"
 #include "hardware/adc.h"
 #include "user_interface.h"
 #include "hardware/timer.h"
+#include "hardware/structs/timer.h"
 #include "hardware/irq.h"
 #include <limits.h>
 
+#define ALARM_NUM 0
+#define ALARM_IRQ TIMER_IRQ_0
 
 // FSM States:
 enum CALC_States
@@ -36,41 +40,7 @@ char operator;
 uint32_t calculated_result;
 bool operator2_specified, goToOperator;
 struct buttonPressed pressLoc;
-
-#define ALARM_NUM 0
-#define ALARM_IRQ timer_hardware_alarm_get_irq_num(timer_hw, ALARM_NUM)
-static volatile bool alarm_fired;
-
-void timer_ISR()
-{
-    // Clear the alarm irq
-    hw_clear_bits(&timer_hw->intr, 1u);
-
-    // Assume alarm 0 has fired
-    printf("Alarm IRQ fired\n");
-    alarm_fired = true;
-}
-
-int main()
-{
-    // Enable the interrupt for our alarm (the timer outputs 4 alarm irqs)
-    hw_set_bits(&timer_hw->inte, 1u);
-    // Set irq handler for alarm irq
-    irq_set_exclusive_handler(ALARM_IRQ, timer_ISR); // Tells the Pico that ALARM_IRQ is an ISR.
-    // Enable the alarm irq
-    irq_set_enabled(ALARM_IRQ, true);
-    // Enable interrupt in block and at processor
-
-    // Alarm is only 32 bits so if trying to delay more
-    // than that need to be careful and keep track of the upper
-    // bits
-    uint64_t target = timer_hw->timerawl + delay_us;
-
-    // Write the lower 32 bits of the target time to the alarm which
-    // will arm it
-    timer_hw->alarm[ALARM_NUM] = (uint32_t)target;
-    while (1);
-}
+//static volatile bool alarm_fired;
 
 bool overflowAdd(int original, int changeBy)
 {
@@ -224,7 +194,7 @@ void tick()
         }
         break;
     case Operator:
-        if (clr_pressed() == true)
+        if (pressLoc.depressed == true && pressLoc.which_one == 'C')
         {
             CALC_State = CLR;
         }
@@ -314,7 +284,7 @@ void tick()
                 break;
             }
 
-            if (pressLoc.which_one = '=')
+            if (pressLoc.which_one == '=')
             {
                 if (operand2 == 0)
                 {
@@ -376,7 +346,7 @@ void tick()
                 CALC_State = Error;
             }
         }
-        else if (operator== '*')
+        else if (operator == '*')
         {
             if (!overflowMult(operand1, operand2))
             {
@@ -394,7 +364,7 @@ void tick()
                 CALC_State = Error;
             }
         }
-        else if (operator== '/')
+        else if (operator == '/')
         {
             if (operand2 == 0)
             {
@@ -442,7 +412,7 @@ void tick()
         // If the clear button is pressed, reset the calculator registers and return to the initial state.
         operand1 = 0;
         operator= 'F';
-        operand2 = 0;
+        operand2 = 1;
         calculated_result = 0;
         displayResult(0);
         CALC_State = Operand;
@@ -458,5 +428,65 @@ void tick()
     default:
         // Default case for state machine still needs to be implemented (if at all).
         break;
+    }
+}
+
+// void timer_ISR()
+// {
+//     // Clear the alarm irq
+//     hw_clear_bits(&timer_hw->intr, 1u);
+
+//    tick();
+// }
+
+/*int main()
+{
+    drawInterface();
+    CALC_State = CLR;
+    // Enable the interrupt for our alarm (the timer outputs 4 alarm irqs)
+    hw_set_bits(&timer_hw->inte, 1u);
+    // Set irq handler for alarm irq
+    irq_set_exclusive_handler(ALARM_IRQ, timer_ISR); // Tells the Pico that ALARM_IRQ is an ISR.
+    // Enable the alarm irq
+    irq_set_enabled(ALARM_IRQ, true);
+    // Enable interrupt in block and at processor
+
+    // Alarm is only 32 bits so if trying to delay more
+    // than that need to be careful and keep track of the upper
+    // bits
+    uint64_t target = timer_hw->timerawl + 16666;
+
+    // Write the lower 32 bits of the target time to the alarm which
+    // will arm it
+    timer_hw->alarm[ALARM_NUM] = (uint32_t)target;
+    while (1);
+}*/
+uint32_t t1, t2, t3, t4;
+uint32_t gameTimer = 300;
+#define DEBOUNCE_PD_MS 200
+
+
+int main() {
+    drawInterface();
+    CALC_State = CLR;
+    t1 = timer_read();
+    t3 = timer_read();
+    while (1)
+    {
+        // Button Debounce Code
+        t2 = timer_read();
+        if (timer_elapsed_ms(t1, t2) >= DEBOUNCE_PD_MS)
+        {
+            pressLoc = getButton(pressLoc);
+            t1 = t2;
+        }
+        // Tick the game state machine.
+        pressLoc = getButton(pressLoc);
+        t4 = timer_read();
+        if (timer_elapsed_ms(t3, t4) >= gameTimer)
+        {
+            tick();
+            t3 = t4;
+        }
     }
 }

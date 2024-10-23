@@ -10,7 +10,7 @@ void displayResult(int result)
 {
     // Buffer for the display output of the calculator.
     char outputBuffer[32];
-    sprintf(outputBuffer, "%d", result);
+    sprintf(outputBuffer, "%d                                                 ", result);
     tft_setCursor(10, 10);
     tft_writeString(outputBuffer);
 }
@@ -19,7 +19,7 @@ void displayOperator(char operator)
 {
     // Buffer for the display output of the calculator.
     char outputBuffer[32];
-    sprintf(outputBuffer, "%s", operator);
+    sprintf(outputBuffer, "%c                                                      ", operator);
     tft_setCursor(10, 10);
     tft_writeString(outputBuffer);
 }
@@ -27,7 +27,7 @@ void displayOperator(char operator)
 void displayErr(){
     // Buffer for the display output of the calculator.
     char outputBuffer[32];
-    sprintf(outputBuffer, "ERROR");
+    sprintf(outputBuffer, "ERROR                                      ");
     tft_setCursor(10, 10);
     tft_writeString(outputBuffer);
 }
@@ -35,7 +35,14 @@ void displayErr(){
 void displayDiv0(){
     // Buffer for the display output of the calculator.
     char outputBuffer[32];
-    sprintf(outputBuffer, "DIV0");
+    sprintf(outputBuffer, "DIV0                                           ");
+    tft_setCursor(10, 10);
+    tft_writeString(outputBuffer);
+}
+
+void clearScreen() {
+    char outputBuffer[32];
+    sprintf(outputBuffer, "%s", "                                                             ");
     tft_setCursor(10, 10);
     tft_writeString(outputBuffer);
 }
@@ -44,8 +51,6 @@ void drawInterface()
 {
     char buf[2];
     buf[1] = '\0';
-    // Buffer for the display output of the calculator.
-    char outputBuffer[32];
     ts_lcd_init();
 
     // Draw the Buttons:
