@@ -35,7 +35,7 @@ int main()
         pressLoc = getButton(pressLoc);
         if (pressLoc.depressed) {
             sprintf(buf, "%c", pressLoc.which_one);
-            tft_setCursor(10, 10);
+            tft_setCursor(290, 10);
             tft_writeString(buf);
         }
     }

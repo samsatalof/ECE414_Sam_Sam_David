@@ -10,7 +10,7 @@
 void drawInterface();
 
 // Displays the current value on the screen.
-void displayResult(int result);
+void displayResult(int32_t result);
 
 // Displays the current operator on the screen.
 void displayOperator(char operator);

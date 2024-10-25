@@ -6,13 +6,32 @@
 #include <stdio.h>
 #include "user_interface.h"
 
-void displayResult(int result)
+void displayResult(int32_t result)
 {
     // Buffer for the display output of the calculator.
+    uint8_t length = 0;
+    int32_t intVal = result;
+    if (intVal == 0)
+    {
+        length = 1;
+    }
+    else
+    {
+        if (intVal < 0) {
+            length++;
+        }
+        while (intVal != 0)
+        {
+            intVal = intVal / 10;
+            length++;
+        }
+    }
     char outputBuffer[32];
     sprintf(outputBuffer, "%d              ", result);
-    tft_setCursor(10, 10);
+    tft_writeString("             ");
+    tft_setCursor(300 - (10 * length), 10);
     tft_writeString(outputBuffer);
+    tft_setCursor(300 - (10 * length), 10);
 }
 
 void displayOperator(char operator)
@@ -20,30 +39,38 @@ void displayOperator(char operator)
     // Buffer for the display output of the calculator.
     char outputBuffer[32];
     sprintf(outputBuffer, "%c       ", operator);
-    tft_setCursor(10, 10);
+    tft_writeString("             ");
+    tft_setCursor(290, 10);
     tft_writeString(outputBuffer);
+    tft_setCursor(290, 10);
 }
 
-void displayErr(){
+void displayErr()
+{
     // Buffer for the display output of the calculator.
     char outputBuffer[32];
-    sprintf(outputBuffer, "ERROR             ");
-    tft_setCursor(10, 10);
+    sprintf(outputBuffer, "ERROR     ");
+    tft_writeString("             ");
+    tft_setCursor(255, 10);
     tft_writeString(outputBuffer);
+    tft_setCursor(255, 10);
 }
 
-void displayDiv0(){
+void displayDiv0()
+{
     // Buffer for the display output of the calculator.
     char outputBuffer[32];
-    sprintf(outputBuffer, "DIV0            ");
-    tft_setCursor(10, 10);
+    sprintf(outputBuffer, "DIV0        ");
+    tft_writeString("             ");
+    tft_setCursor(255, 10);
     tft_writeString(outputBuffer);
+    tft_setCursor(255, 10);
 }
 
-void clearScreen() {
+void clearScreen()
+{
     char outputBuffer[32];
-    sprintf(outputBuffer, "%s", "       ");
-    tft_setCursor(10, 10);
+    sprintf(outputBuffer, "%s", "         ");
     tft_writeString(outputBuffer);
 }
 
@@ -55,6 +82,7 @@ void drawInterface()
 
     // Draw the Buttons:
     // Column 1:
+    tft_drawRoundRect(4, 0, 75, 35, 10, ILI9340_WHITE);
     tft_drawRoundRect(4, 40, 75, 45, 10, ILI9340_WHITE);
     tft_drawRoundRect(4, 90, 75, 45, 10, ILI9340_WHITE);
     tft_drawRoundRect(4, 140, 75, 45, 10, ILI9340_WHITE);
@@ -77,6 +105,9 @@ void drawInterface()
 
     // Print the symbols onto the buttons:
     // Column 1:
+    buf[0] = 'N';
+    tft_setCursor(34, 15);
+    tft_writeString(buf);
     buf[0] = '7';
     tft_setCursor(34, 62);
     tft_writeString(buf);
@@ -145,21 +176,25 @@ struct buttonPressed getButton(struct buttonPressed buttonPressedStruct)
             buttonPressedStruct.depressed = true;
 
             // First check which column, then check which row within each column.
-            if ((*px > 4) && (*px < 79)) // Column 1
+            if ((*px > 4) && (*px < 90)) // Column 1
             {
-                if ((*py > 155) && (*py < 200)) // Row 1
+                if ((*py > 185) && (*py < 240)) // Negative
+                {
+                    buttonPressedStruct.which_one = 'N';
+                }
+                else if ((*py > 155) && (*py < 185)) // Row 1
                 {
                     buttonPressedStruct.which_one = '7';
                 }
-                else if ((*py > 125) && (*py < 150)) // Row 2
+                else if ((*py > 120) && (*py < 150)) // Row 2
                 {
                     buttonPressedStruct.which_one = '4';
                 }
-                else if ((*py > 90) && (*py < 125)) // Row 3
+                else if ((*py > 85) && (*py < 120)) // Row 3
                 {
                     buttonPressedStruct.which_one = '1';
                 }
-                else if ((*py > 15) && (*py < 90)) // Row 4
+                else if ((*py > 15) && (*py < 85)) // Row 4
                 {
                     buttonPressedStruct.which_one = '0';
                 }
@@ -169,21 +204,21 @@ struct buttonPressed getButton(struct buttonPressed buttonPressedStruct)
                     buttonPressedStruct.which_one = 'F'; // Failure code --potential unused
                 }
             }
-            else if ((*px > 83) && (*px < 158)) // Column 2
+            else if ((*px > 95) && (*px < 170)) // Column 2
             {
-                if ((*py > 155) && (*py < 200)) // Row 1
+                if ((*py > 155) && (*py < 185)) // Row 1
                 {
                     buttonPressedStruct.which_one = '8';
                 }
-                else if ((*py > 125) && (*py < 150)) // Row 2
+                else if ((*py > 120) && (*py < 150)) // Row 2
                 {
                     buttonPressedStruct.which_one = '5';
                 }
-                else if ((*py > 90) && (*py < 125)) // Row 3
+                else if ((*py > 85) && (*py < 120)) // Row 3
                 {
                     buttonPressedStruct.which_one = '2';
                 }
-                else if ((*py > 15) && (*py < 90)) // Row 4
+                else if ((*py > 15) && (*py < 85)) // Row 4
                 {
                     buttonPressedStruct.which_one = 'C';
                 }
@@ -193,21 +228,21 @@ struct buttonPressed getButton(struct buttonPressed buttonPressedStruct)
                     buttonPressedStruct.which_one = 'F'; // Failure code --potential unused
                 }
             }
-            else if ((*px > 162) && (*px < 237)) // Column 3
+            else if ((*px > 175) && (*px < 237)) // Column 3
             {
-                if ((*py > 155) && (*py < 200)) // Row 1
+                if ((*py > 155) && (*py < 185)) // Row 1
                 {
                     buttonPressedStruct.which_one = '9';
                 }
-                else if ((*py > 125) && (*py < 150)) // Row 2
+                else if ((*py > 120) && (*py < 150)) // Row 2
                 {
                     buttonPressedStruct.which_one = '6';
                 }
-                else if ((*py > 90) && (*py < 125)) // Row 3
+                else if ((*py > 85) && (*py < 120)) // Row 3
                 {
                     buttonPressedStruct.which_one = '3';
                 }
-                else if ((*py > 15) && (*py < 90)) // Row 4
+                else if ((*py > 15) && (*py < 85)) // Row 4
                 {
                     buttonPressedStruct.which_one = '=';
                 }
@@ -219,19 +254,19 @@ struct buttonPressed getButton(struct buttonPressed buttonPressedStruct)
             }
             else if ((*px > 241) && (*px < 316)) // Column 4
             {
-                if ((*py > 155) && (*py < 200)) // Row 1
+                if ((*py > 155) && (*py < 185)) // Row 1
                 {
                     buttonPressedStruct.which_one = '+';
                 }
-                else if ((*py > 125) && (*py < 150)) // Row 2
+                else if ((*py > 120) && (*py < 150)) // Row 2
                 {
                     buttonPressedStruct.which_one = '-';
                 }
-                else if ((*py > 90) && (*py < 125)) // Row 3
+                else if ((*py > 85) && (*py < 120)) // Row 3
                 {
                     buttonPressedStruct.which_one = '*';
                 }
-                else if ((*py > 15) && (*py < 90)) // Row 4
+                else if ((*py > 15) && (*py < 85)) // Row 4
                 {
                     buttonPressedStruct.which_one = '/';
                 }
