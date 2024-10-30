@@ -519,7 +519,6 @@ void tick()
         else if (pressLoc.depressed == true && pressLoc.which_one == '=')
         {
             CALC_State = Result;
-            // displayResult(calculated_result); --THIS MIGHT BE NEEDED, MIGHT BE REDUNDANT.
         }
         break;
     case DIV_0:
@@ -552,36 +551,6 @@ void tick()
     }
 }
 
-// void timer_ISR()
-// {
-//     // Clear the alarm irq
-//     hw_clear_bits(&timer_hw->intr, 1u);
-
-//    tick();
-// }
-
-/*int main()
-{
-    drawInterface();
-    CALC_State = CLR;
-    // Enable the interrupt for our alarm (the timer outputs 4 alarm irqs)
-    hw_set_bits(&timer_hw->inte, 1u);
-    // Set irq handler for alarm irq
-    irq_set_exclusive_handler(ALARM_IRQ, timer_ISR); // Tells the Pico that ALARM_IRQ is an ISR.
-    // Enable the alarm irq
-    irq_set_enabled(ALARM_IRQ, true);
-    // Enable interrupt in block and at processor
-
-    // Alarm is only 32 bits so if trying to delay more
-    // than that need to be careful and keep track of the upper
-    // bits
-    uint64_t target = timer_hw->timerawl + 16666;
-
-    // Write the lower 32 bits of the target time to the alarm which
-    // will arm it
-    timer_hw->alarm[ALARM_NUM] = (uint32_t)target;
-    while (1);
-}*/
 uint32_t t1, t2, t3, t4;
 uint32_t gameTimer = 300;
 #define DEBOUNCE_PD_MS 200
