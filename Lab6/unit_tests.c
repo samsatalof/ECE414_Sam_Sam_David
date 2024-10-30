@@ -6,6 +6,7 @@
 #define UART_RX_PIN 1
 
 #include <stdio.h>
+#include <stdint.h>
 #include "timer.h"
 #include "uart_read.h"
 
@@ -41,7 +42,7 @@ int main()
         printf("integral-gain       i: %d\r", i);
         printf("derivative-gain     d: %d\r", d);
         printf("If you would like to change a value, type the cooresponding letter followed by a space and the new numerical value\r");
-        scanf("&s", *user_in);
+        scanf("%s", *user_in);
         getcmd(*user_in, *intermediate_cmd, *intermediate_number);
         if (*intermediate_cmd == 's')
         {
