@@ -21,6 +21,8 @@
 
 #define NO_CAPTURE_READY 0xffffffff
 
+    extern uint16_t rpm;
+
     // Configure Interrupt on IC_PIN
     void ic_init();   
     

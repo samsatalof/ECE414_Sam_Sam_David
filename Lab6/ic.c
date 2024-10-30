@@ -17,6 +17,7 @@
 
     static volatile uint32_t capture, last_capture, capture_period;
     static volatile bool capture_flag;
+    uint16_t rpm;
 
     // IC Interrupt service routine - called when a rising
     // edge occurs on IC_PIN
