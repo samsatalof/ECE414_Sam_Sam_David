@@ -1,3 +1,11 @@
+enum UART_States
+{
+    UART_Init,
+    UART_Wait,
+    UART_Input
+};
+enum UART_States UART_State;
+
 void getcmd(char *line, char *cmd, int *np)
 {
     int num = 0;

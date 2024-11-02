@@ -7,8 +7,11 @@
 
 #include <stdio.h>
 #include <stdint.h>
+#include <stdbool.h>
 #include "timer.h"
 #include "uart_read.h"
+#include "pico/stdlib.h"
+#include "ic.h"
 
 uint8_t *s;
 uint8_t *p;
@@ -17,13 +20,47 @@ uint8_t *d;
 
 int main()
 {
-    // Unit Test 4
+    // Unit Test 1 --Test the ability to read and write data from the phototransistor
+    // Monitor GPIO Pin 14 to see when it is held high or low. Print a message to the LCD depending on this state.
+    stdio_init_all();
+    gpio_init(14);
+    gpio_set_dir(14, GPIO_IN);
+    gpio_pull_up(14);
+    ts_lcd_init();
+    tft_setCursor(10, 10);
+    char outputBuffer[40];
+
+    while (1)
+    {
+        bool photoTransistorValue = gpio_get(14);
+        if (photoTransistorValue == true)
+        {
+            sprintf(outputBuffer, "Phototransistor Blocked");
+        }
+        else if (photoTransistorValue == false)
+        {
+            sprintf(outputBuffer, "Phototransistor Unblocked");
+        }
+        tft_writeString(outputBuffer);
+    }
+
+    // Unit Test 1.5 --continued
+    /*
+    printf("Demo of interrupt-drive Input Capture\n");
+    ic_init();
+    while (1)
+    {
+        uint32_t rpm = ic_getrpm();
+        printf("rpm=%d\n", rpm);
+        sleep_ms(1000);
+    }*/
+
+    /*
+    // Unit Test 2 --Test the ability to read and write data with the UART
     stdio_init_all();
     uart_init(UART_ID, BAUD_RATE);
     gpio_set_function(UART_TX_PIN, GPIO_FUNC_UART);
     gpio_set_function(UART_RX_PIN, GPIO_FUNC_UART);
-    uint32_t t1, t2;
-    t1 = timer_read();
 
     // Assign parameters with default starting values.
     *s = 0;
@@ -60,12 +97,8 @@ int main()
         {
             *d = *intermediate_number;
         }
+    }*/
 
-        t2 = timer_read();
-        if (timer_elapsed_ms(t1, t2) >= 1000) // 1 second interval for timer
-        {
-            // Put code to run based on timer pulses here:
-            t1 = t2;
-        }
-    }
+    // Unit Test 3 --Demonstrate imprecise control of the motor with PWM Signal
+    //TODO later
 }
