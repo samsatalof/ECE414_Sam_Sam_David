@@ -1,8 +1,7 @@
 #include "lcd_rpm.h"
+#include <stdio.h>
 
-enum lcdStates lcdState;
-
-tick_fct()
+enum lcdStates tick_fct(enum lcdStates lcdState)
 {
     switch (lcdState)
     {
@@ -19,6 +18,8 @@ tick_fct()
         displayRpm();
         break;
     }
+
+    return lcdState;
 }
 
 void displayRpm()
