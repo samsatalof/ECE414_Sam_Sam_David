@@ -6,6 +6,8 @@
 #ifndef UART_READ_H
 #define UART_READ_H
 
-void getcmd(char *line, char *cmd, int *np);
+#include <stdint.h>
+
+void getcmd(char *line, char *cmd, uint32_t *np);
 
 #endif

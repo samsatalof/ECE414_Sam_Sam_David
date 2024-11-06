@@ -1,3 +1,5 @@
+#include "uart_read.h"
+
 enum UART_States
 {
     UART_Init,
@@ -6,9 +8,9 @@ enum UART_States
 };
 enum UART_States UART_State;
 
-void getcmd(char *line, char *cmd, int *np)
+void getcmd(char *line, char *cmd, uint32_t *np)
 {
-    int num = 0;
+    uint32_t num = 0;
     while (*line != ' ')
     {
         *cmd = *line;

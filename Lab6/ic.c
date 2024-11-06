@@ -31,8 +31,8 @@ void ic_callback(uint gpio, uint32_t event_mask)
 // Configure Interrupt on IC_PIN
 void ic_init()
 {
-    gpio_init(IC_PIN); // is this necessary?  Hunter doesn't do this
-    gpio_set_irq_enabled_with_callback(IC_PIN, GPIO_IRQ_EDGE_RISE, true, &ic_callback);
+    gpio_init(14); // is this necessary?  Hunter doesn't do this
+    gpio_set_irq_enabled_with_callback(14, GPIO_IRQ_EDGE_RISE, true, &ic_callback);
     capture = 0;
     last_capture = 0;
     capture_period = NO_CAPTURE_READY;
