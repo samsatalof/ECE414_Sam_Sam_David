@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <string.h>
 #include "timer.h"
 #include "uart_read.h"
 #include "pico/stdlib.h"
@@ -85,15 +86,15 @@ int main()
     gpio_set_function(UART_RX_PIN, GPIO_FUNC_UART);
 
     // Assign parameters with default starting values.
-    uint8_t s1;
-    uint8_t p1;
-    uint8_t i1;
-    uint8_t d1;
+    uint32_t s1;
+    uint32_t p1;
+    uint32_t i1;
+    uint32_t d1;
 
-    uint8_t *s = &s1;
-    uint8_t *p = &p1;
-    uint8_t *i = &i1;
-    uint8_t *d = &d1;
+    uint32_t *s = &s1;
+    uint32_t *p = &p1;
+    uint32_t *i = &i1;
+    uint32_t *d = &d1;
 
     *s = 0;
     *p = 0;
@@ -103,35 +104,41 @@ int main()
     uint32_t intermediate_number;
     uint32_t *intermediate_number1 = &intermediate_number;
 
-    char intermediate_cmd;
-    char user_in[32];
-
+    char input_command[2];
+    
     while (1)
     {
-        printf("Current parameters:");
-        printf("target-rate         s: %d\r", s);
-        printf("proportional-gain   p: %d\r", p);
-        printf("integral-gain       i: %d\r", i);
-        printf("derivative-gain     d: %d\r", d);
-        printf("If you would like to change a value, type the cooresponding letter followed by a space and the new numerical value\n");
-        scanf("%s", *user_in);
-        getcmd(user_in, &intermediate_cmd, intermediate_number1);
-        if (intermediate_cmd == 's')
+        printf("If you would like to change a value, type the cooresponding letter (s, p, i, or d) followed by a space and the desired numerical value\n");
+        printf("E.g. --> s 32\n");
+        printf("\n --> ");
+        scanf("%s %d", input_command, &intermediate_number);
+
+        if (strcmp(input_command, "s") == 0)
         {
             *s = intermediate_number;
         }
-        else if (intermediate_cmd == 'p')
+        else if (strcmp(input_command, "p") == 0)
         {
             *p = intermediate_number;
         }
-        else if (intermediate_cmd = 'i')
+        else if (strcmp(input_command, "i") == 0)
         {
             *i = intermediate_number;
         }
-        else if (intermediate_cmd = 'd')
+        else if (strcmp(input_command, "d") == 0)
         {
             *d = intermediate_number;
         }
+        else
+        {
+            printf("ERROR!!!! Unknown variable name.\n");
+        }
+
+        printf("\n\nCurrent parameters:\n");
+        printf("target-rate         s: %d\n", *s);
+        printf("proportional-gain   p: %d\n", *p);
+        printf("integral-gain       i: %d\n", *i);
+        printf("derivative-gain     d: %d\n", *d);
     }
 
     // Unit Test X:
