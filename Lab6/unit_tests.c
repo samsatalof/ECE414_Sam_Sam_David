@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdbool.h>
-#include <string.h>
+#include <string.h> //NOTE THIS ONE HERE IS NEW SAM MAYBE WE NEED TO ADD IT ELSEWHERE!!!???
 #include "timer.h"
 #include "uart_read.h"
 #include "pico/stdlib.h"

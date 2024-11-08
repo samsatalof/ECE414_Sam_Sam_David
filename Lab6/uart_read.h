@@ -8,6 +8,4 @@
 
 #include <stdint.h>
 
-void getcmd(char *line, char *cmd, uint32_t *np);
-
 #endif
