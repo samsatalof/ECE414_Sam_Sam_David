@@ -1,0 +1,89 @@
+(kicad_sch
+	(version 20231120)
+	(generator "eeschema")
+	(generator_version "8.0")
+	(uuid "a7eb302b-4c0e-4e76-a448-81d60e32dc53")
+	(paper "A4")
+	(lib_symbols)
+	(sheet
+		(at 86.36 24.13)
+		(size 91.44 59.69)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "0a0bc6fd-dd68-4f86-827c-11be032b5776")
+		(property "Sheetname" "Analog Inputs"
+			(at 86.36 23.4184 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "Analog Inputs.kicad_sch"
+			(at 86.36 84.4046 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "ECE414_Final_Proj"
+				(path "/a7eb302b-4c0e-4e76-a448-81d60e32dc53"
+					(page "3")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 87.63 99.06)
+		(size 90.17 55.88)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "1586e03b-8289-4302-a527-1727e3237aed")
+		(property "Sheetname" "Digital Side"
+			(at 87.63 98.3484 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "untitled.kicad_sch"
+			(at 87.63 155.5246 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "ECE414_Final_Proj"
+				(path "/a7eb302b-4c0e-4e76-a448-81d60e32dc53"
+					(page "2")
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+)
