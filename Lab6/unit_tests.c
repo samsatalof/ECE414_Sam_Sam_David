@@ -4,6 +4,7 @@
 // datasheet for information on which other pins can be used.
 #define UART_TX_PIN 0
 #define UART_RX_PIN 1
+#define UARTIMSC 0x40034038
 
 #include <stdio.h>
 #include <stdint.h>
@@ -16,6 +17,18 @@
 #include "ts_lcd.h"
 #include "TFTMaster.h"
 #include "hardware/pwm.h"
+#include "hardware/irq.h"
+#include "hardware/uart.h"
+
+uint32_t intermediate_number;
+uint32_t *uartInt = (uint32_t*) UARTIMSC;
+char input_command[2];
+
+irq_handler_t uart_check() {
+    scanf("%s %d", input_command, &intermediate_number);
+    *uartInt &= 0xFFFFFFEF;
+}
+
 
 int main()
 {
@@ -85,6 +98,9 @@ int main()
     gpio_set_function(UART_TX_PIN, GPIO_FUNC_UART);
     gpio_set_function(UART_RX_PIN, GPIO_FUNC_UART);
 
+    uart_set_irq_enables(UART_ID,1, 0);
+    irq_set_exclusive_handler(20, uart_check());
+
     // Assign parameters with default starting values.
     uint32_t s1;
     uint32_t p1;
@@ -100,18 +116,12 @@ int main()
     *p = 0;
     *i = 0;
     *d = 0;
-
-    uint32_t intermediate_number;
-    uint32_t *intermediate_number1 = &intermediate_number;
-
-    char input_command[2];
     
     while (1)
     {
         printf("If you would like to change a value, type the cooresponding letter (s, p, i, or d) followed by a space and the desired numerical value\n");
         printf("E.g. --> s 32\n");
         printf("\n --> ");
-        scanf("%s %d", input_command, &intermediate_number);
 
         if (strcmp(input_command, "s") == 0)
         {
