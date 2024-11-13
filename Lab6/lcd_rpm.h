@@ -11,7 +11,7 @@
 #include "ts_lcd.h"
 #include "pico/stdlib.h"
 
-enum lcdStates
+enum LCD_States
 {
     LCD_INIT,
     LCD_DISPLAYRPM

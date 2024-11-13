@@ -4,6 +4,7 @@
 // datasheet for information on which other pins can be used.
 #define UART_TX_PIN 0
 #define UART_RX_PIN 1
+#define UARTICR 0x40034044
 #define UARTIMSC 0x40034038
 
 #include <stdio.h>
@@ -21,12 +22,52 @@
 #include "hardware/uart.h"
 
 uint32_t intermediate_number;
-uint32_t *uartInt = (uint32_t*) UARTIMSC;
+uint32_t *uartIntClear = (uint32_t*) UARTICR;
+uint32_t *uartSetInt = (uint32_t*) UARTIMSC;
 char input_command[2];
+uint32_t s1;
+uint32_t p1;
+uint32_t i1;
+uint32_t d1;
+
+uint32_t *s = &s1;
+uint32_t *p = &p1;
+uint32_t *i = &i1;
+uint32_t *d = &d1;
 
 irq_handler_t uart_check() {
     scanf("%s %d", input_command, &intermediate_number);
-    *uartInt &= 0xFFFFFFEF;
+    printf("If you would like to change a value, type the cooresponding letter (s, p, i, or d) followed by a space and the desired numerical value\n");
+        printf("E.g. --> s 32\n");
+        printf("\n --> ");
+
+        if (strcmp(input_command, "s") == 0)
+        {
+            *s = intermediate_number;
+        }
+        else if (strcmp(input_command, "p") == 0)
+        {
+            *p = intermediate_number;
+        }
+        else if (strcmp(input_command, "i") == 0)
+        {
+            *i = intermediate_number;
+        }
+        else if (strcmp(input_command, "d") == 0)
+        {
+            *d = intermediate_number;
+        }
+        else
+        {
+            printf("ERROR!!!! Unknown variable name.\n");
+        }
+
+        printf("\n\nCurrent parameters:\n");
+        printf("target-rate         s: %d\n", *s);
+        printf("proportional-gain   p: %d\n", *p);
+        printf("integral-gain       i: %d\n", *i);
+        printf("derivative-gain     d: %d\n", *d);
+        *uartIntClear |= 0x00000010;
 }
 
 
@@ -98,58 +139,28 @@ int main()
     gpio_set_function(UART_TX_PIN, GPIO_FUNC_UART);
     gpio_set_function(UART_RX_PIN, GPIO_FUNC_UART);
 
-    uart_set_irq_enables(UART_ID,1, 0);
-    irq_set_exclusive_handler(20, uart_check());
+    *uartSetInt |= 0x00000010;
+    irq_set_exclusive_handler(UART0_IRQ, uart_check());
 
     // Assign parameters with default starting values.
-    uint32_t s1;
-    uint32_t p1;
-    uint32_t i1;
-    uint32_t d1;
-
-    uint32_t *s = &s1;
-    uint32_t *p = &p1;
-    uint32_t *i = &i1;
-    uint32_t *d = &d1;
+    
 
     *s = 0;
     *p = 0;
     *i = 0;
     *d = 0;
     
-    while (1)
-    {
-        printf("If you would like to change a value, type the cooresponding letter (s, p, i, or d) followed by a space and the desired numerical value\n");
-        printf("E.g. --> s 32\n");
-        printf("\n --> ");
+    printf("If you would like to change a value, type the cooresponding letter (s, p, i, or d) followed by a space and the desired numerical value\n");
+    printf("E.g. --> s 32\n");
+    printf("\n --> ");
+    printf("main");
+    printf("\n\nCurrent parameters:\n");
+    printf("target-rate         s: %d\n", *s);
+    printf("proportional-gain   p: %d\n", *p);
+    printf("integral-gain       i: %d\n", *i);
+    printf("derivative-gain     d: %d\n", *d);
 
-        if (strcmp(input_command, "s") == 0)
-        {
-            *s = intermediate_number;
-        }
-        else if (strcmp(input_command, "p") == 0)
-        {
-            *p = intermediate_number;
-        }
-        else if (strcmp(input_command, "i") == 0)
-        {
-            *i = intermediate_number;
-        }
-        else if (strcmp(input_command, "d") == 0)
-        {
-            *d = intermediate_number;
-        }
-        else
-        {
-            printf("ERROR!!!! Unknown variable name.\n");
-        }
-
-        printf("\n\nCurrent parameters:\n");
-        printf("target-rate         s: %d\n", *s);
-        printf("proportional-gain   p: %d\n", *p);
-        printf("integral-gain       i: %d\n", *i);
-        printf("derivative-gain     d: %d\n", *d);
-    }
+    while(1);
 
     // Unit Test X:
     // stdio_init_all();
