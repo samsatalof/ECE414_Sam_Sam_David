@@ -49,6 +49,9 @@ int main() {
     pwm_set_enabled(slice_num, true);
     ic_init();
     
+    // Controller initialization
+
+    irq_set_exclusive_handler(TIMER_IRQ_0);
 
     while(1);
 }
