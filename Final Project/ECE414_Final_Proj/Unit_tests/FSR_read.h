@@ -23,7 +23,7 @@ typedef struct fsrStruct {
     uint16_t FSR12;
 };
 
-struct fsrStruct fsr_read();
+uint16_t fsr_read();
 
 void adc_init();
 

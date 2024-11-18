@@ -10,18 +10,22 @@
 #define UART_TX_PIN 0
 #define UART_RX_PIN 1
 
-int main() {
-    adc_init();
+int main()
+{
+ adc_init();
 
-    uart_init(UART_ID, BAUD_RATE);
-    gpio_set_function(UART_TX_PIN, GPIO_FUNC_UART);
-    gpio_set_function(UART_RX_PIN, GPIO_FUNC_UART);
-    printf("sanity check");
+uart_init(UART_ID, BAUD_RATE);
+gpio_set_function(UART_TX_PIN, GPIO_FUNC_UART);
+gpio_set_function(UART_RX_PIN, GPIO_FUNC_UART);
+printf("sanity check");
 
-    struct fsrStruct fsr;
-    while (1) {
-        fsr = fsr_read();
-        printf("%d", fsr.FSR1);
-        sleep_ms(1000);
-    }
+struct fsrStruct fsr;
+while (1) {
+    //fsr = fsr_read();
+    //printf("%b", fsr_read());
+    fsr_read();
+    sleep_ms(1000);
+ }
+
+
 }
