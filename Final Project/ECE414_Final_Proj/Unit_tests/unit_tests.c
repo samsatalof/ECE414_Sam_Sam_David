@@ -21,9 +21,8 @@ printf("sanity check");
 
 struct fsrStruct fsr;
 while (1) {
-    //fsr = fsr_read();
-    //printf("%b", fsr_read());
-    fsr_read();
+    fsr = fsr_read();
+    printf("ADC 1: %d %d %d %d, ADC 2: %d %d %d %d %d\n", fsr.FSR1, fsr.FSR2, fsr.FSR3, fsr.FSR4, fsr.FSR5, fsr.FSR6, fsr.FSR7, fsr.FSR8, fsr.FSR9);
     sleep_ms(1000);
  }
 

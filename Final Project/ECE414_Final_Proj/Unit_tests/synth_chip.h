@@ -3,8 +3,8 @@
     Authors: Sam Owens, Sam Satalof, David Green
 */
 
-#ifndef FSR_READ_H
-#define FSR_READ_H
+#ifndef SYNTH_CHIP_H
+#define SYNTH_CHIP_H
 
 #include <stdint.h>
 
@@ -25,6 +25,6 @@ typedef struct fsrStruct {
 
 struct fsrStruct fsr_read();
 
-void adc_init();
+void synth_init();
 
 #endif
