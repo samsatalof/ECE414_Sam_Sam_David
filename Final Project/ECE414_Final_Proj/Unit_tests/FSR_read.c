@@ -8,7 +8,7 @@
 #define SDO_GPIO 11
 #define SDI_GPIO 12
 #define CS_GPIO 13
-#define SPI_PORT spi0
+#define SPI_PORT spi1
 
 uint16_t fsr_read()
 {
@@ -26,7 +26,7 @@ uint16_t fsr_read()
     read.FSR1 = spi_read;
 
     gpio_put(CS_GPIO, 1);
-    printf("%b",spi_read);
+    printf("%d\n",spi_read);
     return spi_read;
 }
 
