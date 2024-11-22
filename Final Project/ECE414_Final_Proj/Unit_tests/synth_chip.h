@@ -8,22 +8,20 @@
 
 #include <stdint.h>
 
-typedef struct fsrStruct {
-    uint16_t FSR1;
-    uint16_t FSR2;
-    uint16_t FSR3;
-    uint16_t FSR4;
-    uint16_t FSR5;
-    uint16_t FSR6;
-    uint16_t FSR7;
-    uint16_t FSR8;
-    uint16_t FSR9;
-    uint16_t FSR10;
-    uint16_t FSR11;
-    uint16_t FSR12;
+typedef enum intrument_t {
+    PIANO,
+    TRUMPET
 };
 
-struct fsrStruct fsr_read();
+void set_rate_contdim_vibrato_(bool rate, bool contdim, bool vibrato);
+
+void set_volume(uint8_t vol);
+
+void  set_attack_decay(uint8_t atk, uint8_t decay);
+
+void set_sustain_release(uint8_t sust, uint8_t release);
+
+void set_instrument(enum intrument_t inst);
 
 void synth_init();
 
