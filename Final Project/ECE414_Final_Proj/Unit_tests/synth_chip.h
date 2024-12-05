@@ -8,20 +8,31 @@
 
 #include <stdint.h>
 
-typedef enum intrument_t {
-    PIANO,
-    TRUMPET
-};
+// typedef enum intrument_t {
+//     PIANO,
+//     TRUMPET,
+//     CUSTOM
+// };
 
-void set_rate_contdim_vibrato_(bool rate, bool contdim, bool vibrato);
+//void set_rate_contdim_vibrato(bool rate, bool contdim, bool vibrato);
 
-void set_volume(uint8_t vol);
+//void set_reg(uint8_t reg, uint8_t data);
 
-void  set_attack_decay(uint8_t atk, uint8_t decay);
+void play_key1();
 
-void set_sustain_release(uint8_t sust, uint8_t release);
+void play_key2();
 
-void set_instrument(enum intrument_t inst);
+//void play_key3();
+
+//void init_ch1();
+
+// void set_volume(uint8_t vol);
+
+// void set_attack_decay(uint8_t atk, uint8_t decay);
+
+// void set_sustain_release(uint8_t sust, uint8_t release);
+
+// void set_instrument(enum intrument_t inst);
 
 void synth_init();
 

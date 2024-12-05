@@ -99,8 +99,6 @@ struct fsrStruct fsr_read()
 
 void adc_init()
 {
-    stdio_init_all();
-
     // Initialize SPI channel (channel, baud rate set to 1.35MHz)
     spi_init(SPI_PORT, 1350000);
     // Format (channel, data bits per transfer, polarity, phase, order)
