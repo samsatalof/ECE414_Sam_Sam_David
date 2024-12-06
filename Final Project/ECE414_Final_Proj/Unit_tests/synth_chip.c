@@ -134,7 +134,7 @@ void scale()
     uint8_t channel = 1;
     uint8_t octave = 0x04;
 
-    play_note(note, channel, octave);
+    play_note(note, channel, octave-1);
     busy_wait_ms(1000);
     note = D;
     play_note(note, channel, octave);
@@ -155,7 +155,7 @@ void scale()
     play_note(note, channel, octave);
     busy_wait_ms(1000);
     note = C;
-    play_note(note, channel, octave + 1);
+    play_note(note, channel, octave);
     busy_wait_ms(1000);
     clear_note(channel);
 
