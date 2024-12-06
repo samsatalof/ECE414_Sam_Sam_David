@@ -106,32 +106,55 @@ void play_note(enum Note note, uint8_t channel, uint8_t octave)
         Breg = 0x02 + (octave << 2) + 0x20;
         break;
     }
-    set_reg(0xA0 + (channel - 1), Areg);
-    set_reg(0xB0 + (channel - 1), Breg);
+    set_reg((uint8_t) 0xA0 + (channel - 1), Areg);
+    set_reg((uint8_t) 0xB0 + (channel - 1), Breg);
 }
 
 void clear_note(uint8_t channel)
 {
-    set_reg(0xA0 + (channel - 1), 0x00);
-    set_reg(0xB0 + (channel - 1), 0x00);
+    set_reg((uint8_t) 0xA0 + (channel - 1), 0x00);
+    set_reg((uint8_t) 0xB0 + (channel - 1), 0x00);
 }
 
 void init_ch1()
 {
-    set_reg(0x20, 0x01);
-    set_reg(0x40, 0x10);
-    set_reg(0x60, 0xF0);
-    set_reg(0x80, 0x77);
-    set_reg(0x23, 0x01);
-    set_reg(0x43, 0x00);
-    set_reg(0x63, 0xF0);
-    set_reg(0x83, 0x77);
+    for (uint8_t i = 0; i < 3; i++) {
+        set_reg(0x20+i, 0x01);
+        set_reg(0x40+i, 0x10);
+        set_reg(0x60+i, 0xF0);
+        set_reg(0x80+i, 0x77);
+        set_reg(0x23+i, 0x01);
+        set_reg(0x43+i, 0x00);
+        set_reg(0x63+i, 0xF0);
+        set_reg(0x83+i, 0x77);
+    }
+    for (uint8_t i = 8; i < 12; i++) {
+        set_reg(0x20+i, 0x01);
+        set_reg(0x40+i, 0x10);
+        set_reg(0x60+i, 0xF0);
+        set_reg(0x80+i, 0x77);
+        set_reg(0x23+i, 0x01);
+        set_reg(0x43+i, 0x00);
+        set_reg(0x63+i, 0xF0);
+        set_reg(0x83+i, 0x77);
+    }
+    for (uint8_t i = 16; i < 29; i++) {
+        set_reg(0x20+i, 0x01);
+        set_reg(0x40+i, 0x10);
+        set_reg(0x60+i, 0xF0);
+        set_reg(0x80+i, 0x77);
+        set_reg(0x23+i, 0x01);
+        set_reg(0x43+i, 0x00);
+        set_reg(0x63+i, 0xF0);
+        set_reg(0x83+i, 0x77);
+    }
+
 }
 
 void scale()
 {
     enum Note note = C;
-    uint8_t channel = 1;
+    uint8_t channel = 0x01;
     uint8_t octave = 0x04;
 
     play_note(note, channel, octave-1);
@@ -173,7 +196,7 @@ void scale()
     busy_wait_ms(1000);
     clear_note(channel);
     clear_note(channel+2);
-    busy_wait_ms(1000);
+    busy_wait_ms(2000);
     clear_note(channel+1);
     clear_note(channel+3);
     clear_note(channel+4);
