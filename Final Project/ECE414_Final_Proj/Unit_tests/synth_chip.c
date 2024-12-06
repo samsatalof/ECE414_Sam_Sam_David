@@ -9,589 +9,204 @@
 #define RCLK_GPIO 7
 #define SPI_SHIFT spi0
 
-
 // OPL
 #define D_GPIO 3
-#define A0 21 // Address Write
+#define A0 21       // Address Write
 #define WRN_GPIO 20 // Write
 #define CSN_GPIO 19 // Chip select
-#define ICN_GPIO 22 // Init clear 
+#define ICN_GPIO 22 // Init clear
 
-void play_key1() {
-    uint8_t spi_write;
+void set_reg(uint8_t reg, uint8_t data)
+{
+    // Make sure relevant signals are reset
     gpio_put(CSN_GPIO, 1);
     gpio_put(RCLK_GPIO, 1);
     gpio_put(WRN_GPIO, 1);
 
-    //Specify which register we are writing to in the synth chip.
-    spi_write = 0xA0;
-    gpio_put(CSN_GPIO,0);
-    gpio_put(A0, 0);
-    // Write to shift register
-    spi_write_blocking(SPI_SHIFT, &spi_write, 1);
+    // Specify which register we are writing to in the synth chip.
+    gpio_put(CSN_GPIO, 0);                  // Select synth chip
+    gpio_put(A0, 0);                        // Writing Address, not data
+    spi_write_blocking(SPI_SHIFT, &reg, 1); // Write to shift reg
+    // Store value in shift reg output
     gpio_put(RCLK_GPIO, 0);
     busy_wait_us(1);
     gpio_put(RCLK_GPIO, 1);
     // Write to synth chip
     gpio_put(WRN_GPIO, 0);
     busy_wait_us(10);
-    gpio_put(WRN_GPIO, 1); 
+    gpio_put(WRN_GPIO, 1);
     busy_wait_us(10); // Min: 3.35 for Address
 
-    gpio_put(A0, 1);
-    //Write data to the specified register within the Synth chip.
-    spi_write = 0x98; //This is the note D.
-    spi_write_blocking(SPI_SHIFT, &spi_write, 1);
-    gpio_put(RCLK_GPIO, 0);
-    busy_wait_us(1);
-    gpio_put(RCLK_GPIO, 1);
-    gpio_put(WRN_GPIO, 0);
-    busy_wait_us(10);
-    gpio_put(WRN_GPIO, 1);
-    busy_wait_us(10); //Min : 23.74 fo Write
-    gpio_put(CSN_GPIO, 1);
-
-    //Specify which register we are writing to in the synth chip.
-    spi_write = 0xB0;
-    gpio_put(CSN_GPIO,0);
-    gpio_put(A0, 0);
-    // Write to shift register
-    spi_write_blocking(SPI_SHIFT, &spi_write, 1);
-    gpio_put(RCLK_GPIO, 0);
-    busy_wait_us(1);
-    gpio_put(RCLK_GPIO, 1);
-    // Write to synth chip
-    gpio_put(WRN_GPIO, 0);
-    busy_wait_us(10); // Min: 3.35 for Address
-    gpio_put(WRN_GPIO, 1);
-    busy_wait_us(10);
-
-    gpio_put(A0, 1);
-    //Write data to the specified register within the Synth chip.
-    spi_write = 0x31; //This is the note D.
-    spi_write_blocking(SPI_SHIFT, &spi_write, 1);
-    gpio_put(RCLK_GPIO, 0);
-    busy_wait_us(1);
-    gpio_put(RCLK_GPIO, 1);
-    gpio_put(WRN_GPIO, 0);
-    busy_wait_us(10); //Min : 23.74 fo Write
-    gpio_put(WRN_GPIO, 1);
-    busy_wait_us(10);
-    gpio_put(CSN_GPIO, 1);
-
-    //Specify which register we are writing to in the synth chip.
-    spi_write = 0x20;
-    gpio_put(CSN_GPIO,0);
-    gpio_put(A0, 0);
-    // Write to shift register
-    spi_write_blocking(SPI_SHIFT, &spi_write, 1);
+    // Write data to synth chip reg
+    gpio_put(A0, 1);                         // Writing data, not address
+    spi_write_blocking(SPI_SHIFT, &data, 1); // Write to shift reg
+    // Store value in shift reg output
     gpio_put(RCLK_GPIO, 0);
     busy_wait_us(1);
     gpio_put(RCLK_GPIO, 1);
     // Write to synth chip
     gpio_put(WRN_GPIO, 0);
     busy_wait_us(10);
-    gpio_put(WRN_GPIO, 1); 
-    busy_wait_us(10); // Min: 3.35 for Address
-
-    gpio_put(A0, 1);
-    //Write data to the specified register within the Synth chip.
-    spi_write = 0x01; //This is the note D.
-    spi_write_blocking(SPI_SHIFT, &spi_write, 1);
-    gpio_put(RCLK_GPIO, 0);
-    busy_wait_us(1);
-    gpio_put(RCLK_GPIO, 1);
-    gpio_put(WRN_GPIO, 0);
-    busy_wait_us(10);
     gpio_put(WRN_GPIO, 1);
-    busy_wait_us(10); //Min : 23.74 fo Write
-    gpio_put(CSN_GPIO, 1);
-
-    //Specify which register we are writing to in the synth chip.
-    spi_write = 0x40;
-    gpio_put(CSN_GPIO,0);
-    gpio_put(A0, 0);
-    // Write to shift register
-    spi_write_blocking(SPI_SHIFT, &spi_write, 1);
-    gpio_put(RCLK_GPIO, 0);
-    busy_wait_us(1);
-    gpio_put(RCLK_GPIO, 1);
-    // Write to synth chip
-    gpio_put(WRN_GPIO, 0);
-    busy_wait_us(10);
-    gpio_put(WRN_GPIO, 1); 
-    busy_wait_us(10); // Min: 3.35 for Address
-
-    gpio_put(A0, 1);
-    //Write data to the specified register within the Synth chip.
-    spi_write = 0x10; //This is the note D.
-    spi_write_blocking(SPI_SHIFT, &spi_write, 1);
-    gpio_put(RCLK_GPIO, 0);
-    busy_wait_us(1);
-    gpio_put(RCLK_GPIO, 1);
-    gpio_put(WRN_GPIO, 0);
-    busy_wait_us(10);
-    gpio_put(WRN_GPIO, 1);
-    busy_wait_us(10); //Min : 23.74 fo Write
-    gpio_put(CSN_GPIO, 1);
-
-    //Specify which register we are writing to in the synth chip.
-    spi_write = 0x60;
-    gpio_put(CSN_GPIO,0);
-    gpio_put(A0, 0);
-    // Write to shift register
-    spi_write_blocking(SPI_SHIFT, &spi_write, 1);
-    gpio_put(RCLK_GPIO, 0);
-    busy_wait_us(1);
-    gpio_put(RCLK_GPIO, 1);
-    // Write to synth chip
-    gpio_put(WRN_GPIO, 0);
-    busy_wait_us(10);
-    gpio_put(WRN_GPIO, 1); 
-    busy_wait_us(10); // Min: 3.35 for Address
-
-    gpio_put(A0, 1);
-    //Write data to the specified register within the Synth chip.
-    spi_write = 0xF0; //This is the note D.
-    spi_write_blocking(SPI_SHIFT, &spi_write, 1);
-    gpio_put(RCLK_GPIO, 0);
-    busy_wait_us(1);
-    gpio_put(RCLK_GPIO, 1);
-    gpio_put(WRN_GPIO, 0);
-    busy_wait_us(10);
-    gpio_put(WRN_GPIO, 1);
-    busy_wait_us(10); //Min : 23.74 fo Write
-    gpio_put(CSN_GPIO, 1);
-
-    //Specify which register we are writing to in the synth chip.
-    spi_write = 0x80;
-    gpio_put(CSN_GPIO,0);
-    gpio_put(A0, 0);
-    // Write to shift register
-    spi_write_blocking(SPI_SHIFT, &spi_write, 1);
-    gpio_put(RCLK_GPIO, 0);
-    busy_wait_us(1);
-    gpio_put(RCLK_GPIO, 1);
-    // Write to synth chip
-    gpio_put(WRN_GPIO, 0);
-    busy_wait_us(10);
-    gpio_put(WRN_GPIO, 1); 
-    busy_wait_us(10); // Min: 3.35 for Address
-
-    gpio_put(A0, 1);
-    //Write data to the specified register within the Synth chip.
-    spi_write = 0x77; //This is the note D.
-    spi_write_blocking(SPI_SHIFT, &spi_write, 1);
-    gpio_put(RCLK_GPIO, 0);
-    busy_wait_us(1);
-    gpio_put(RCLK_GPIO, 1);
-    gpio_put(WRN_GPIO, 0);
-    busy_wait_us(10);
-    gpio_put(WRN_GPIO, 1);
-    busy_wait_us(10); //Min : 23.74 fo Write
-    gpio_put(CSN_GPIO, 1);
-
-    //Specify which register we are writing to in the synth chip.
-    spi_write = 0x23;
-    gpio_put(CSN_GPIO,0);
-    gpio_put(A0, 0);
-    // Write to shift register
-    spi_write_blocking(SPI_SHIFT, &spi_write, 1);
-    gpio_put(RCLK_GPIO, 0);
-    busy_wait_us(1);
-    gpio_put(RCLK_GPIO, 1);
-    // Write to synth chip
-    gpio_put(WRN_GPIO, 0);
-    busy_wait_us(10);
-    gpio_put(WRN_GPIO, 1); 
-    busy_wait_us(10); // Min: 3.35 for Address
-
-    gpio_put(A0, 1);
-    //Write data to the specified register within the Synth chip.
-    spi_write = 0x01; //This is the note D.
-    spi_write_blocking(SPI_SHIFT, &spi_write, 1);
-    gpio_put(RCLK_GPIO, 0);
-    busy_wait_us(1);
-    gpio_put(RCLK_GPIO, 1);
-    gpio_put(WRN_GPIO, 0);
-    busy_wait_us(10);
-    gpio_put(WRN_GPIO, 1);
-    busy_wait_us(10); //Min : 23.74 fo Write
-    gpio_put(CSN_GPIO, 1);
-
-    //Specify which register we are writing to in the synth chip.
-    spi_write = 0x43;
-    gpio_put(CSN_GPIO,0);
-    gpio_put(A0, 0);
-    // Write to shift register
-    spi_write_blocking(SPI_SHIFT, &spi_write, 1);
-    gpio_put(RCLK_GPIO, 0);
-    busy_wait_us(1);
-    gpio_put(RCLK_GPIO, 1);
-    // Write to synth chip
-    gpio_put(WRN_GPIO, 0);
-    busy_wait_us(10);
-    gpio_put(WRN_GPIO, 1); 
-    busy_wait_us(10); // Min: 3.35 for Address
-
-    gpio_put(A0, 1);
-    //Write data to the specified register within the Synth chip.
-    spi_write = 0x00; //This is the note D.
-    spi_write_blocking(SPI_SHIFT, &spi_write, 1);
-    gpio_put(RCLK_GPIO, 0);
-    busy_wait_us(1);
-    gpio_put(RCLK_GPIO, 1);
-    gpio_put(WRN_GPIO, 0);
-    busy_wait_us(10);
-    gpio_put(WRN_GPIO, 1);
-    busy_wait_us(10); //Min : 23.74 fo Write
-    gpio_put(CSN_GPIO, 1);
-
-    //Specify which register we are writing to in the synth chip.
-    spi_write = 0x63;
-    gpio_put(CSN_GPIO,0);
-    gpio_put(A0, 0);
-    // Write to shift register
-    spi_write_blocking(SPI_SHIFT, &spi_write, 1);
-    gpio_put(RCLK_GPIO, 0);
-    busy_wait_us(1);
-    gpio_put(RCLK_GPIO, 1);
-    // Write to synth chip
-    gpio_put(WRN_GPIO, 0);
-    busy_wait_us(10);
-    gpio_put(WRN_GPIO, 1); 
-    busy_wait_us(10); // Min: 3.35 for Address
-
-    gpio_put(A0, 1);
-    //Write data to the specified register within the Synth chip.
-    spi_write = 0xF0; //This is the note D.
-    spi_write_blocking(SPI_SHIFT, &spi_write, 1);
-    gpio_put(RCLK_GPIO, 0);
-    busy_wait_us(1);
-    gpio_put(RCLK_GPIO, 1);
-    gpio_put(WRN_GPIO, 0);
-    busy_wait_us(10);
-    gpio_put(WRN_GPIO, 1);
-    busy_wait_us(10); //Min : 23.74 fo Write
-    gpio_put(CSN_GPIO, 1);
-
-    //Specify which register we are writing to in the synth chip.
-    spi_write = 0x83;
-    gpio_put(CSN_GPIO,0);
-    gpio_put(A0, 0);
-    // Write to shift register
-    spi_write_blocking(SPI_SHIFT, &spi_write, 1);
-    gpio_put(RCLK_GPIO, 0);
-    busy_wait_us(1);
-    gpio_put(RCLK_GPIO, 1);
-    // Write to synth chip
-    gpio_put(WRN_GPIO, 0);
-    busy_wait_us(10);
-    gpio_put(WRN_GPIO, 1); 
-    busy_wait_us(10); // Min: 3.35 for Address
-
-    gpio_put(A0, 1);
-    //Write data to the specified register within the Synth chip.
-    spi_write = 0x77; //This is the note D.
-    spi_write_blocking(SPI_SHIFT, &spi_write, 1);
-    gpio_put(RCLK_GPIO, 0);
-    busy_wait_us(1);
-    gpio_put(RCLK_GPIO, 1);
-    gpio_put(WRN_GPIO, 0);
-    busy_wait_us(10);
-    gpio_put(WRN_GPIO, 1);
-    busy_wait_us(10); //Min : 23.74 fo Write
-    gpio_put(CSN_GPIO, 1);
+    busy_wait_us(10);      // Min : 23.74 for Write
+    gpio_put(CSN_GPIO, 1); // Deselect Synth chip, and end write cycle
 }
 
-void play_key2() {
-    uint8_t spi_write;
-    gpio_put(CSN_GPIO, 1);
-    gpio_put(RCLK_GPIO, 1);
-    gpio_put(WRN_GPIO, 1);
-
-    //Specify which register we are writing to in the synth chip.
-    spi_write = 0xA0;
-    gpio_put(CSN_GPIO,0);
-    gpio_put(A0, 0);
-    // Write to shift register
-    spi_write_blocking(SPI_SHIFT, &spi_write, 1);
-    gpio_put(RCLK_GPIO, 0);
-    busy_wait_us(1);
-    gpio_put(RCLK_GPIO, 1);
-    // Write to synth chip
-    gpio_put(WRN_GPIO, 0);
-    busy_wait_us(10);
-    gpio_put(WRN_GPIO, 1); 
-    busy_wait_us(10); // Min: 3.35 for Address
-
-    gpio_put(A0, 1);
-    //Write data to the specified register within the Synth chip.
-    spi_write = 0x02; //This is the note D.
-    spi_write_blocking(SPI_SHIFT, &spi_write, 1);
-    gpio_put(RCLK_GPIO, 0);
-    busy_wait_us(1);
-    gpio_put(RCLK_GPIO, 1);
-    gpio_put(WRN_GPIO, 0);
-    busy_wait_us(10);
-    gpio_put(WRN_GPIO, 1);
-    busy_wait_us(10); //Min : 23.74 fo Write
-    gpio_put(CSN_GPIO, 1);
-
-    //Specify which register we are writing to in the synth chip.
-    spi_write = 0xB0;
-    gpio_put(CSN_GPIO,0);
-    gpio_put(A0, 0);
-    // Write to shift register
-    spi_write_blocking(SPI_SHIFT, &spi_write, 1);
-    gpio_put(RCLK_GPIO, 0);
-    busy_wait_us(1);
-    gpio_put(RCLK_GPIO, 1);
-    // Write to synth chip
-    gpio_put(WRN_GPIO, 0);
-    busy_wait_us(10); // Min: 3.35 for Address
-    gpio_put(WRN_GPIO, 1);
-    busy_wait_us(10);
-
-    gpio_put(A0, 1);
-    //Write data to the specified register within the Synth chip.
-    spi_write = 0x22; //This is the note D.
-    spi_write_blocking(SPI_SHIFT, &spi_write, 1);
-    gpio_put(RCLK_GPIO, 0);
-    busy_wait_us(1);
-    gpio_put(RCLK_GPIO, 1);
-    gpio_put(WRN_GPIO, 0);
-    busy_wait_us(10); //Min : 23.74 fo Write
-    gpio_put(WRN_GPIO, 1);
-    busy_wait_us(10);
-    gpio_put(CSN_GPIO, 1);
-
-    //Specify which register we are writing to in the synth chip.
-    spi_write = 0x20;
-    gpio_put(CSN_GPIO,0);
-    gpio_put(A0, 0);
-    // Write to shift register
-    spi_write_blocking(SPI_SHIFT, &spi_write, 1);
-    gpio_put(RCLK_GPIO, 0);
-    busy_wait_us(1);
-    gpio_put(RCLK_GPIO, 1);
-    // Write to synth chip
-    gpio_put(WRN_GPIO, 0);
-    busy_wait_us(10);
-    gpio_put(WRN_GPIO, 1); 
-    busy_wait_us(10); // Min: 3.35 for Address
-
-    gpio_put(A0, 1);
-    //Write data to the specified register within the Synth chip.
-    spi_write = 0x01; //This is the note D.
-    spi_write_blocking(SPI_SHIFT, &spi_write, 1);
-    gpio_put(RCLK_GPIO, 0);
-    busy_wait_us(1);
-    gpio_put(RCLK_GPIO, 1);
-    gpio_put(WRN_GPIO, 0);
-    busy_wait_us(10);
-    gpio_put(WRN_GPIO, 1);
-    busy_wait_us(10); //Min : 23.74 fo Write
-    gpio_put(CSN_GPIO, 1);
-
-    //Specify which register we are writing to in the synth chip.
-    spi_write = 0x40;
-    gpio_put(CSN_GPIO,0);
-    gpio_put(A0, 0);
-    // Write to shift register
-    spi_write_blocking(SPI_SHIFT, &spi_write, 1);
-    gpio_put(RCLK_GPIO, 0);
-    busy_wait_us(1);
-    gpio_put(RCLK_GPIO, 1);
-    // Write to synth chip
-    gpio_put(WRN_GPIO, 0);
-    busy_wait_us(10);
-    gpio_put(WRN_GPIO, 1); 
-    busy_wait_us(10); // Min: 3.35 for Address
-
-    gpio_put(A0, 1);
-    //Write data to the specified register within the Synth chip.
-    spi_write = 0x10; //This is the note D.
-    spi_write_blocking(SPI_SHIFT, &spi_write, 1);
-    gpio_put(RCLK_GPIO, 0);
-    busy_wait_us(1);
-    gpio_put(RCLK_GPIO, 1);
-    gpio_put(WRN_GPIO, 0);
-    busy_wait_us(10);
-    gpio_put(WRN_GPIO, 1);
-    busy_wait_us(10); //Min : 23.74 fo Write
-    gpio_put(CSN_GPIO, 1);
-
-    //Specify which register we are writing to in the synth chip.
-    spi_write = 0x60;
-    gpio_put(CSN_GPIO,0);
-    gpio_put(A0, 0);
-    // Write to shift register
-    spi_write_blocking(SPI_SHIFT, &spi_write, 1);
-    gpio_put(RCLK_GPIO, 0);
-    busy_wait_us(1);
-    gpio_put(RCLK_GPIO, 1);
-    // Write to synth chip
-    gpio_put(WRN_GPIO, 0);
-    busy_wait_us(10);
-    gpio_put(WRN_GPIO, 1); 
-    busy_wait_us(10); // Min: 3.35 for Address
-
-    gpio_put(A0, 1);
-    //Write data to the specified register within the Synth chip.
-    spi_write = 0xF0; //This is the note D.
-    spi_write_blocking(SPI_SHIFT, &spi_write, 1);
-    gpio_put(RCLK_GPIO, 0);
-    busy_wait_us(1);
-    gpio_put(RCLK_GPIO, 1);
-    gpio_put(WRN_GPIO, 0);
-    busy_wait_us(10);
-    gpio_put(WRN_GPIO, 1);
-    busy_wait_us(10); //Min : 23.74 fo Write
-    gpio_put(CSN_GPIO, 1);
-
-    //Specify which register we are writing to in the synth chip.
-    spi_write = 0x80;
-    gpio_put(CSN_GPIO,0);
-    gpio_put(A0, 0);
-    // Write to shift register
-    spi_write_blocking(SPI_SHIFT, &spi_write, 1);
-    gpio_put(RCLK_GPIO, 0);
-    busy_wait_us(1);
-    gpio_put(RCLK_GPIO, 1);
-    // Write to synth chip
-    gpio_put(WRN_GPIO, 0);
-    busy_wait_us(10);
-    gpio_put(WRN_GPIO, 1); 
-    busy_wait_us(10); // Min: 3.35 for Address
-
-    gpio_put(A0, 1);
-    //Write data to the specified register within the Synth chip.
-    spi_write = 0x77; //This is the note D.
-    spi_write_blocking(SPI_SHIFT, &spi_write, 1);
-    gpio_put(RCLK_GPIO, 0);
-    busy_wait_us(1);
-    gpio_put(RCLK_GPIO, 1);
-    gpio_put(WRN_GPIO, 0);
-    busy_wait_us(10);
-    gpio_put(WRN_GPIO, 1);
-    busy_wait_us(10); //Min : 23.74 fo Write
-    gpio_put(CSN_GPIO, 1);
-
-    //Specify which register we are writing to in the synth chip.
-    spi_write = 0x23;
-    gpio_put(CSN_GPIO,0);
-    gpio_put(A0, 0);
-    // Write to shift register
-    spi_write_blocking(SPI_SHIFT, &spi_write, 1);
-    gpio_put(RCLK_GPIO, 0);
-    busy_wait_us(1);
-    gpio_put(RCLK_GPIO, 1);
-    // Write to synth chip
-    gpio_put(WRN_GPIO, 0);
-    busy_wait_us(10);
-    gpio_put(WRN_GPIO, 1); 
-    busy_wait_us(10); // Min: 3.35 for Address
-
-    gpio_put(A0, 1);
-    //Write data to the specified register within the Synth chip.
-    spi_write = 0x01; //This is the note D.
-    spi_write_blocking(SPI_SHIFT, &spi_write, 1);
-    gpio_put(RCLK_GPIO, 0);
-    busy_wait_us(1);
-    gpio_put(RCLK_GPIO, 1);
-    gpio_put(WRN_GPIO, 0);
-    busy_wait_us(10);
-    gpio_put(WRN_GPIO, 1);
-    busy_wait_us(10); //Min : 23.74 fo Write
-    gpio_put(CSN_GPIO, 1);
-
-    //Specify which register we are writing to in the synth chip.
-    spi_write = 0x43;
-    gpio_put(CSN_GPIO,0);
-    gpio_put(A0, 0);
-    // Write to shift register
-    spi_write_blocking(SPI_SHIFT, &spi_write, 1);
-    gpio_put(RCLK_GPIO, 0);
-    busy_wait_us(1);
-    gpio_put(RCLK_GPIO, 1);
-    // Write to synth chip
-    gpio_put(WRN_GPIO, 0);
-    busy_wait_us(10);
-    gpio_put(WRN_GPIO, 1); 
-    busy_wait_us(10); // Min: 3.35 for Address
-
-    gpio_put(A0, 1);
-    //Write data to the specified register within the Synth chip.
-    spi_write = 0x00; //This is the note D.
-    spi_write_blocking(SPI_SHIFT, &spi_write, 1);
-    gpio_put(RCLK_GPIO, 0);
-    busy_wait_us(1);
-    gpio_put(RCLK_GPIO, 1);
-    gpio_put(WRN_GPIO, 0);
-    busy_wait_us(10);
-    gpio_put(WRN_GPIO, 1);
-    busy_wait_us(10); //Min : 23.74 fo Write
-    gpio_put(CSN_GPIO, 1);
-
-    //Specify which register we are writing to in the synth chip.
-    spi_write = 0x63;
-    gpio_put(CSN_GPIO,0);
-    gpio_put(A0, 0);
-    // Write to shift register
-    spi_write_blocking(SPI_SHIFT, &spi_write, 1);
-    gpio_put(RCLK_GPIO, 0);
-    busy_wait_us(1);
-    gpio_put(RCLK_GPIO, 1);
-    // Write to synth chip
-    gpio_put(WRN_GPIO, 0);
-    busy_wait_us(10);
-    gpio_put(WRN_GPIO, 1); 
-    busy_wait_us(10); // Min: 3.35 for Address
-
-    gpio_put(A0, 1);
-    //Write data to the specified register within the Synth chip.
-    spi_write = 0xF0; //This is the note D.
-    spi_write_blocking(SPI_SHIFT, &spi_write, 1);
-    gpio_put(RCLK_GPIO, 0);
-    busy_wait_us(1);
-    gpio_put(RCLK_GPIO, 1);
-    gpio_put(WRN_GPIO, 0);
-    busy_wait_us(10);
-    gpio_put(WRN_GPIO, 1);
-    busy_wait_us(10); //Min : 23.74 fo Write
-    gpio_put(CSN_GPIO, 1);
-
-    //Specify which register we are writing to in the synth chip.
-    spi_write = 0x83;
-    gpio_put(CSN_GPIO,0);
-    gpio_put(A0, 0);
-    // Write to shift register
-    spi_write_blocking(SPI_SHIFT, &spi_write, 1);
-    gpio_put(RCLK_GPIO, 0);
-    busy_wait_us(1);
-    gpio_put(RCLK_GPIO, 1);
-    // Write to synth chip
-    gpio_put(WRN_GPIO, 0);
-    busy_wait_us(10);
-    gpio_put(WRN_GPIO, 1); 
-    busy_wait_us(10); // Min: 3.35 for Address
-
-    gpio_put(A0, 1);
-    //Write data to the specified register within the Synth chip.
-    spi_write = 0x77; //This is the note D.
-    spi_write_blocking(SPI_SHIFT, &spi_write, 1);
-    gpio_put(RCLK_GPIO, 0);
-    busy_wait_us(1);
-    gpio_put(RCLK_GPIO, 1);
-    gpio_put(WRN_GPIO, 0);
-    busy_wait_us(10);
-    gpio_put(WRN_GPIO, 1);
-    busy_wait_us(10); //Min : 23.74 fo Write
-    gpio_put(CSN_GPIO, 1);
+void play_note(enum Note note, uint8_t channel, uint8_t octave)
+{
+    uint8_t Areg, Breg;
+    switch (note)
+    {
+    case C:
+        Areg = 0x6B;
+        Breg = 0x02 + (octave << 2) + 0x20;
+        break;
+    case Cs:
+        Areg = 0x81;
+        Breg = 0x01 + (octave << 2) + 0x20;
+        break;
+    case D:
+        Areg = 0x98;
+        Breg = 0x01 + (octave << 2) + 0x20;
+        break;
+    case Ds:
+        Areg = 0xB0;
+        Breg = 0x01 + (octave << 2) + 0x20;
+        break;
+    case E:
+        Areg = 0xCA;
+        Breg = 0x01 + (octave << 2) + 0x20;
+        break;
+    case F:
+        Areg = 0xE5;
+        Breg = 0x01 + (octave << 2) + 0x20;
+        break;
+    case Fs:
+        Areg = 0x02;
+        Breg = 0x01 + (octave << 2) + 0x20;
+        break;
+    case G:
+        Areg = 0x20;
+        Breg = 0x02 + (octave << 2) + 0x20;
+        break;
+    case Gs:
+        Areg = 0x41;
+        Breg = 0x02 + (octave << 2) + 0x20;
+        break;
+    case A:
+        Areg = 0x63;
+        Breg = 0x02 + (octave << 2) + 0x20;
+        break;
+    case As:
+        Areg = 0x87;
+        Breg = 0x02 + (octave << 2) + 0x20;
+        break;
+    case B:
+        Areg = 0xAE;
+        Breg = 0x02 + (octave << 2) + 0x20;
+        break;
+    }
+    set_reg(0xA0 + (channel - 1), Areg);
+    set_reg(0xB0 + (channel - 1), Breg);
 }
 
-void synth_init() {
+void clear_note(uint8_t channel)
+{
+    set_reg(0xA0 + (channel - 1), 0x00);
+    set_reg(0xB0 + (channel - 1), 0x00);
+}
+
+void init_ch1()
+{
+    set_reg(0x20, 0x01);
+    set_reg(0x40, 0x10);
+    set_reg(0x60, 0xF0);
+    set_reg(0x80, 0x77);
+    set_reg(0x23, 0x01);
+    set_reg(0x43, 0x00);
+    set_reg(0x63, 0xF0);
+    set_reg(0x83, 0x77);
+}
+
+void scale()
+{
+    enum Note note = C;
+    uint8_t channel = 1;
+    uint8_t octave = 0x04;
+
+    play_note(note, channel, octave);
+    busy_wait_ms(1000);
+    note = D;
+    play_note(note, channel, octave);
+    busy_wait_ms(1000);
+    note = E;
+    play_note(note, channel, octave);
+    busy_wait_ms(1000);
+    note = F;
+    play_note(note, channel, octave);
+    busy_wait_ms(1000);
+    note = G;
+    play_note(note, channel, octave);
+    busy_wait_ms(1000);
+    note = A;
+    play_note(note, channel, octave);
+    busy_wait_ms(1000);
+    note = B;
+    play_note(note, channel, octave);
+    busy_wait_ms(1000);
+    note = C;
+    play_note(note, channel, octave + 1);
+    busy_wait_ms(1000);
+    clear_note(channel);
+
+    busy_wait_ms(1000);
+
+    play_note(note, channel, octave-1);
+    note = G;
+    play_note(note, channel+1, octave);
+    note = C;
+    play_note(note, channel+3, octave+1);
+    note = E;
+    play_note(note, channel+4, octave+1);
+    note = As;
+    play_note(note, channel+2, octave+1);
+    busy_wait_ms(1000);
+    clear_note(channel);
+    clear_note(channel+2);
+    busy_wait_ms(1000);
+    clear_note(channel+1);
+    clear_note(channel+3);
+    clear_note(channel+4);
+
+
+    // set_reg(0xA0, 0x98);
+    // set_reg(0xB0, 0x31);
+    // busy_wait_ms(1000);
+    // set_reg(0xA0, 0xCA);
+    // set_reg(0xB0, 0x31);
+    // busy_wait_ms(1000);
+    // set_reg(0xA0, 0x02);
+    // set_reg(0xB0, 0x32);
+    // busy_wait_ms(1000);
+    // set_reg(0xA0, 0x41);
+    // set_reg(0xB0, 0x32);
+    // busy_wait_ms(1000);
+    // set_reg(0xA0, 0x63);
+    // set_reg(0xB0, 0x32);
+    // busy_wait_ms(1000);
+    // set_reg(0xA0, 0xAE);
+    // set_reg(0xB0, 0x32);
+    // busy_wait_ms(1000);
+    // set_reg(0xA0, 0x81);
+    // set_reg(0xB0, 0x35);
+    // busy_wait_ms(1000);
+    // set_reg(0xA0, 0x98);
+    // set_reg(0xB0, 0x35);
+    // busy_wait_ms(1000);
+}
+
+void synth_init()
+{
     gpio_set_function(SER_GPIO, GPIO_FUNC_SPI);
     gpio_set_function(SRCLK_GPIO, GPIO_FUNC_SPI);
 
@@ -619,4 +234,10 @@ void synth_init() {
     gpio_put(ICN_GPIO, 0);
     busy_wait_us(20);
     gpio_put(ICN_GPIO, 1);
+
+    uint16_t i = 0;
+    for (uint16_t i = 0; i <= 245; i++)
+    {
+        set_reg(i, 0x00);
+    }
 }

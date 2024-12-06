@@ -14,17 +14,32 @@
 //     CUSTOM
 // };
 
+typedef enum Note {
+    C,
+    Cs,
+    D,
+    Ds,
+    E,
+    F,
+    Fs,
+    G,
+    Gs,
+    A,
+    As,
+    B
+};
+
 //void set_rate_contdim_vibrato(bool rate, bool contdim, bool vibrato);
 
-//void set_reg(uint8_t reg, uint8_t data);
+void set_reg(uint8_t reg, uint8_t data);
 
-void play_key1();
+void scale();
 
-void play_key2();
+void init_ch1();
 
-//void play_key3();
+void play_note(enum Note note, uint8_t channel, uint8_t octave);
 
-//void init_ch1();
+void clear_note(uint8_t channel);
 
 // void set_volume(uint8_t vol);
 
