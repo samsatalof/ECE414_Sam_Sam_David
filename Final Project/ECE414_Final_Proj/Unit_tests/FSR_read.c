@@ -119,7 +119,7 @@ struct fsrStruct fsr_read()
 
     gpio_put(CS1_GPIO, 1);
     gpio_put(CS2_GPIO, 1);
-    return read;
+    return read; 
 }
 
 void adc_init()

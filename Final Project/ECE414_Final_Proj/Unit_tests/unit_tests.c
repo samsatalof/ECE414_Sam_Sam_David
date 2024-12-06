@@ -53,7 +53,7 @@ int main()
     while (1)
     {
         fsr = fsr_read();
-        printf("ADC 1: %d %d %d %d %d %d %d %d, ADC 2: %d %d %d %d \r", fsr.FSR1, fsr.FSR2, fsr.FSR3, fsr.FSR4, fsr.FSR5, fsr.FSR6, fsr.FSR7, fsr.FSR8, fsr.FSR9, fsr.FSR10, fsr.FSR11, fsr.FSR12);
+        printf(" ADC 1: %d %d %d %d %d %d %d %d, ADC 2: %d %d %d %d \r", fsr.FSR1, fsr.FSR2, fsr.FSR3, fsr.FSR4, fsr.FSR5, fsr.FSR6, fsr.FSR7, fsr.FSR8, fsr.FSR9, fsr.FSR10, fsr.FSR11, fsr.FSR12);
         sleep_ms(100);
     }
 }
