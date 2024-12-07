@@ -2,6 +2,7 @@
 #include "hardware/spi.h"
 #include "pico/stdlib.h"
 #include <stdio.h>
+#include <stdbool.h>
 
 // SPI configurations
 #define SCK_GPIO 10
@@ -118,6 +119,14 @@ void fsr_read(uint16_t* fsr)
 
     gpio_put(CS1_GPIO, 1);
     gpio_put(CS2_GPIO, 1);
+}
+
+void slider_pot_read(uint16_t* settings) {
+    
+}
+
+bool vibrato_button_read() {
+
 }
 
 void adc_init()
