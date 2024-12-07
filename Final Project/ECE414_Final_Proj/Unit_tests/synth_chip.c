@@ -52,80 +52,80 @@ void set_reg(uint8_t reg, uint8_t data)
     gpio_put(CSN_GPIO, 1); // Deselect Synth chip, and end write cycle
 }
 
+// Call with note as either a value 0-11, or as Note enum C,Cs,D..., with channel a value 0-8, and octave 0-7 (4 is middle of the piano)
 void play_note(enum Note note, uint8_t channel, uint8_t octave)
 {
     uint8_t Areg, Breg;
     switch (note)
     {
     case C:
-        Areg = 0x6B;
-        Breg = 0x02 + (octave << 2) + 0x20;
+        Areg = 0xAE;
+        Breg = 0x02 + ((octave - 1) << 2) + 0x20;
         break;
     case Cs:
-        Areg = 0x81;
+        Areg = 0x6B;
         Breg = 0x01 + (octave << 2) + 0x20;
         break;
     case D:
-        Areg = 0x98;
+        Areg = 0x81;
         Breg = 0x01 + (octave << 2) + 0x20;
         break;
     case Ds:
-        Areg = 0xB0;
+        Areg = 0x98;
         Breg = 0x01 + (octave << 2) + 0x20;
         break;
     case E:
-        Areg = 0xCA;
+        Areg = 0xB0;
         Breg = 0x01 + (octave << 2) + 0x20;
         break;
     case F:
-        Areg = 0xE5;
+        Areg = 0xCA;
         Breg = 0x01 + (octave << 2) + 0x20;
         break;
     case Fs:
-        Areg = 0x02;
+        Areg = 0xE5;
         Breg = 0x01 + (octave << 2) + 0x20;
         break;
     case G:
-        Areg = 0x20;
+        Areg = 0x02;
         Breg = 0x02 + (octave << 2) + 0x20;
         break;
     case Gs:
-        Areg = 0x41;
+        Areg = 0x20;
         Breg = 0x02 + (octave << 2) + 0x20;
         break;
     case A:
-        Areg = 0x63;
+        Areg = 0x41;
         Breg = 0x02 + (octave << 2) + 0x20;
         break;
     case As:
-        Areg = 0x87;
+        Areg = 0x63;
         Breg = 0x02 + (octave << 2) + 0x20;
         break;
     case B:
-        Areg = 0xAE;
+        Areg = 0x87;
         Breg = 0x02 + (octave << 2) + 0x20;
         break;
     }
-    set_reg((uint8_t) 0xA0 + (channel - 1), Areg);
-    set_reg((uint8_t) 0xB0 + (channel - 1), Breg);
+    set_reg((uint8_t) 0xA0 + (channel), Areg);
+    set_reg((uint8_t) 0xB0 + (channel), Breg);
 }
 
 void clear_note(uint8_t channel)
 {
-    set_reg((uint8_t) 0xA0 + (channel - 1), 0x00);
-    set_reg((uint8_t) 0xB0 + (channel - 1), 0x00);
+    set_reg((uint8_t) 0xB0 + (channel), 0x00);
 }
 
-void init_ch1()
+void init_ch()
 {
     for (uint8_t i = 0; i < 3; i++) {
         set_reg(0x20+i, 0x01);
         set_reg(0x40+i, 0x10);
-        set_reg(0x60+i, 0xF0);
+        set_reg(0x60+i, 0x73);
         set_reg(0x80+i, 0x77);
         set_reg(0x23+i, 0x01);
         set_reg(0x43+i, 0x00);
-        set_reg(0x63+i, 0xF0);
+        set_reg(0x63+i, 0x73);
         set_reg(0x83+i, 0x77);
     }
     for (uint8_t i = 8; i < 12; i++) {
@@ -135,10 +135,10 @@ void init_ch1()
         set_reg(0x80+i, 0x77);
         set_reg(0x23+i, 0x01);
         set_reg(0x43+i, 0x00);
-        set_reg(0x63+i, 0xF0);
+        set_reg(0x63+i, 0x0F);
         set_reg(0x83+i, 0x77);
     }
-    for (uint8_t i = 16; i < 29; i++) {
+    for (uint8_t i = 16; i < 19; i++) {
         set_reg(0x20+i, 0x01);
         set_reg(0x40+i, 0x10);
         set_reg(0x60+i, 0xF0);

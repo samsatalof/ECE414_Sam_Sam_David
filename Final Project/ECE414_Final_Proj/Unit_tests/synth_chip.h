@@ -35,7 +35,7 @@ void set_reg(uint8_t reg, uint8_t data);
 
 void scale();
 
-void init_ch1();
+void init_ch();
 
 void play_note(enum Note note, uint8_t channel, uint8_t octave);
 

@@ -8,22 +8,7 @@
 
 #include <stdint.h>
 
-typedef struct fsrStruct {
-    uint16_t FSR1;
-    uint16_t FSR2;
-    uint16_t FSR3;
-    uint16_t FSR4;
-    uint16_t FSR5;
-    uint16_t FSR6;
-    uint16_t FSR7;
-    uint16_t FSR8;
-    uint16_t FSR9;
-    uint16_t FSR10;
-    uint16_t FSR11;
-    uint16_t FSR12;
-};
-
-struct fsrStruct fsr_read();
+void fsr_read(uint16_t* fsr);
 
 void adc_init();
 
