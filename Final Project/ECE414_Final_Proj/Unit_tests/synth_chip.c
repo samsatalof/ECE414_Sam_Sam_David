@@ -53,7 +53,7 @@ void set_reg(uint8_t reg, uint8_t data)
 }
 
 // Call with note as either a value 0-11, or as Note enum C,Cs,D..., with channel a value 0-8, and octave 0-7 (4 is middle of the piano)
-void play_note(enum Note note, uint8_t channel, uint8_t octave)
+void play_note(enum Note note, uint8_t channel, uint8_t octave, uint16_t volume)
 {
     uint8_t Areg, Breg;
     switch (note)
@@ -113,6 +113,11 @@ void play_note(enum Note note, uint8_t channel, uint8_t octave)
     }
     set_reg((uint8_t) 0xA0 + (channel), Areg);
     set_reg((uint8_t) 0xB0 + (channel), Breg);
+
+    volume = (26000 - volume)/1950;
+    set_reg(0x40 + (channel), 0x10 + volume);
+    set_reg(0x43 + (channel), 0x00 + volume);
+
 }
 
 void clear_note(uint8_t channel)
@@ -122,12 +127,13 @@ void clear_note(uint8_t channel)
 
 void init_ch()
 {
+    set_reg(0xBD, 0x40);
     for (uint8_t i = 0; i < 3; i++) {
-        set_reg(0x20+i, 0x01);
+        set_reg(0x20+i, 0x41);
         set_reg(0x40+i, 0x10);
         set_reg(0x60+i, 0x73);
         set_reg(0x80+i, 0x77);
-        set_reg(0x23+i, 0x01);
+        set_reg(0x23+i, 0x41);
         set_reg(0x43+i, 0x00);
         set_reg(0x63+i, 0x73);
         set_reg(0x83+i, 0x77);
@@ -157,10 +163,10 @@ void init_ch()
 void set_attack_decay(uint16_t atk, uint16_t decay) {
     uint8_t sentVal = 0x00;
     if (atk > 3200) {
-        sentVal += ((atk/2173) << 4);
+        sentVal += (((atk-3000)/2173) << 4);
     }
     if (decay > 3200) {
-       sentVal += (decay/2173);
+       sentVal += ((decay-3000)/2173);
     }
     for (uint8_t i = 0; i < 3; i++) {
         set_reg(0x60+i, sentVal);
@@ -176,9 +182,39 @@ void set_attack_decay(uint16_t atk, uint16_t decay) {
     }
 }
 
-void set_vibrato(uint16_t intensity) {
+void set_vibrato(bool vibrato) {
+    if (vibrato) {
+        for (uint8_t i = 0; i < 3; i++) {
+            set_reg(0x20+i, 0x41);
+            set_reg(0x23+i, 0x41);
+        }
+        for (uint8_t i = 8; i < 12; i++) {
+            set_reg(0x20+i, 0x41);
+            set_reg(0x23+i, 0x41);
+        }
+        for (uint8_t i = 16; i < 19; i++) {
+            set_reg(0x20+i, 0x41);
+            set_reg(0x23+i, 0x41);
+        }
+    } else {
+        for (uint8_t i = 0; i < 3; i++) {
+            set_reg(0x20+i, 0x01);
+            set_reg(0x23+i, 0x01);
+        }
+        for (uint8_t i = 8; i < 12; i++) {
+            set_reg(0x20+i, 0x01);
+            set_reg(0x23+i, 0x01);
+        }
+        for (uint8_t i = 16; i < 19; i++) {
+            set_reg(0x20+i, 0x01);
+            set_reg(0x23+i, 0x01);
+        }
+    }
+}
+
+void set_sustain(uint16_t intensity) {
     if (intensity > 11000) {
-        uint8_t sentVal = ((intensity/1440) << 4) + 0x07;
+        uint8_t sentVal = (((intensity-10600)/1440) << 4) + 0x07;
         for (uint8_t i = 0; i < 3; i++) {
             set_reg(0x80+i, sentVal);
             set_reg(0x83+i, sentVal);

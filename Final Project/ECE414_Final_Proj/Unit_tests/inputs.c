@@ -11,6 +11,8 @@
 #define CS2_GPIO 9
 #define SPI_PORT spi1
 
+#define VIBRATO_PIN 28
+
 void fsr_read(uint16_t* fsr)
 {
     uint16_t spi_write;

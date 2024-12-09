@@ -8,6 +8,8 @@ pico_sdk_init()
 
 add_executable(main
         main.c
+	debounce_sw1.c
+	sw_in.c
 	inputs.c
 	timer.c
 	synth_chip.c
