@@ -8,7 +8,7 @@ pico_sdk_init()
 
 add_executable(main
         main.c
-	FSR_read.c
+	inputs.c
 	timer.c
 	synth_chip.c
         )

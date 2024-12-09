@@ -1,4 +1,4 @@
-#include "FSR_read.h"
+#include "inputs.h"
 #include "pico/stdlib.h"
 #include "synth_chip.h"
 #include <stdio.h>
@@ -13,9 +13,12 @@
 #define UART_TX_PIN 0
 #define UART_RX_PIN 1
 
-uint16_t fsr[12]; // Stores the current read from fsr 0-11
+uint16_t fsr[13]; // Stores the current read from fsr 0-12
 bool playing[9]; // Stores whether channels 0-8 are currently playing, true means they are
-uint8_t channel[12]; // Stores the channel that fsr 0-11 is playing on, if none then the value is 25
+uint8_t channel[13]; // Stores the channel that fsr 0-12 is playing on, if none then the value is 25
+uint16_t settings[3]; // Stores slider and pot settings
+
+uint32_t t1, t2;
 
 int main() {
     stdio_init_all();
@@ -27,10 +30,20 @@ int main() {
     gpio_set_function(UART_TX_PIN, GPIO_FUNC_UART);
     gpio_set_function(UART_RX_PIN, GPIO_FUNC_UART);
 
+    t1 = timer_read();
     while (1)
     {
+        t2 = timer_read();
+        if (timer_elapsed_ms(t1, t2) >= 500)
+        {
+            slider_pot_read(settings);
+            set_attack_decay(settings[1], settings[0]);
+            set_vibrato(settings[2]);
+            t1 = t2;
+        }
+
         fsr_read(fsr);
-        for (uint8_t i = 0; i < 12; i++) {
+        for (uint8_t i = 0; i < 13; i++) {
             if (fsr[i] > 9000) {
                 if (channel[i] != 25) {
                     play_note((enum Note) i, channel[i], 4);

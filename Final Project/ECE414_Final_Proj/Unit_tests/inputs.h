@@ -3,10 +3,11 @@
     Authors: Sam Owens, Sam Satalof, David Green
 */
 
-#ifndef SETTING_CONTROL_H
-#define SETTING_CONTROL_H
+#ifndef INPUTS_H
+#define INPUTS_H
 
 #include <stdint.h>
+#include <stdbool.h>
 
 // Reads from sliders and pots
 void slider_pot_read(uint16_t* settings);

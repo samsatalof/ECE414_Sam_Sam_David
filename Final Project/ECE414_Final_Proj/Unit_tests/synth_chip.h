@@ -26,7 +26,8 @@ typedef enum Note {
     Gs,
     A,
     As,
-    B
+    B,
+    Ch
 };
 
 //void set_rate_contdim_vibrato(bool rate, bool contdim, bool vibrato);
@@ -43,13 +44,10 @@ void play_note(enum Note note, uint8_t channel, uint8_t octave);
 // Stops a channel playing a note
 void clear_note(uint8_t channel);
 
-// void set_volume(uint8_t vol);
 
-// void set_attack_decay(uint8_t atk, uint8_t decay);
+void set_attack_decay(uint16_t atk, uint16_t decay);
 
-// void set_sustain_release(uint8_t sust, uint8_t release);
-
-// void set_instrument(enum intrument_t inst);
+void set_vibrato(uint16_t intensity);
 
 // Initializes everything necessary for the synth chip, and resets all registers to 0
 void synth_init();

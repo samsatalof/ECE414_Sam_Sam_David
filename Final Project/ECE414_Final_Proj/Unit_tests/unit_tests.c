@@ -1,4 +1,4 @@
-#include "FSR_read.h"
+#include "inputs.h"
 #include "hardware/spi.h"
 #include "pico/stdlib.h"
 #include "synth_chip.h"
@@ -34,6 +34,8 @@
 //     // }
 // }
 
+uint16_t fsr[16];
+uint16_t settings[3];
 
 #define UART_ID uart0
 #define BAUD_RATE 115200
@@ -51,11 +53,11 @@ int main()
     gpio_set_function(UART_RX_PIN, GPIO_FUNC_UART);
     printf("sanity check");
 
-    struct fsrStruct fsr;
     while (1)
     {
-        fsr = fsr_read();
-        printf(" ADC 1: %d %d %d %d %d %d %d %d, ADC 2: %d %d %d %d \r", fsr.FSR1, fsr.FSR2, fsr.FSR3, fsr.FSR4, fsr.FSR5, fsr.FSR6, fsr.FSR7, fsr.FSR8, fsr.FSR9, fsr.FSR10, fsr.FSR11, fsr.FSR12);
+        fsr_read(fsr);
+        slider_pot_read(settings);
+        printf(" ADC 1: %d %d %d %d %d %d %d %d, ADC 2: %d %d %d %d %d %d %d %d \r", fsr[0], fsr[1], fsr[2], fsr[3], fsr[4], fsr[5], fsr[6], fsr[7], fsr[8], fsr[9], fsr[10], fsr[11], fsr[12], settings[0], settings[1], settings[2]);
         sleep_ms(100);
     }
 }

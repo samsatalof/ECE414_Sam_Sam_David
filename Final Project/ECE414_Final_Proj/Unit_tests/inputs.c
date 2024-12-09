@@ -1,8 +1,7 @@
-#include "FSR_read.h"
+#include "inputs.h"
 #include "hardware/spi.h"
 #include "pico/stdlib.h"
 #include <stdio.h>
-#include <stdbool.h>
 
 // SPI configurations
 #define SCK_GPIO 10
@@ -23,7 +22,7 @@ void fsr_read(uint16_t* fsr)
     gpio_put(CS1_GPIO, 0);
     spi_write16_blocking(SPI_PORT, &spi_write, 1);
     spi_read16_blocking(SPI_PORT, 0, &spi_read, 1);
-    *(fsr+5) = spi_read;
+    *(fsr+6) = spi_read;
 
     // Channel 1, ADC 1
     spi_write = 0x0032;
@@ -31,7 +30,7 @@ void fsr_read(uint16_t* fsr)
     gpio_put(CS1_GPIO, 0);
     spi_write16_blocking(SPI_PORT, &spi_write, 1);
     spi_read16_blocking(SPI_PORT, 0, &spi_read, 1);
-    *(fsr+6) = spi_read;
+    *(fsr+7) = spi_read;
 
     // Channel 2, ADC 1
     spi_write = 0x0034;
@@ -39,7 +38,7 @@ void fsr_read(uint16_t* fsr)
     gpio_put(CS1_GPIO, 0);
     spi_write16_blocking(SPI_PORT, &spi_write, 1);
     spi_read16_blocking(SPI_PORT, 0, &spi_read, 1);
-    *(fsr+7) = spi_read;
+    *(fsr+8) = spi_read;
 
     // Channel 3, ADC 1
     spi_write = 0x0036;
@@ -47,7 +46,7 @@ void fsr_read(uint16_t* fsr)
     gpio_put(CS1_GPIO, 0);
     spi_write16_blocking(SPI_PORT, &spi_write, 1);
     spi_read16_blocking(SPI_PORT, 0, &spi_read, 1);
-    *(fsr+8) = spi_read;
+    *(fsr+9) = spi_read;
 
     // Channel 4, ADC 1
     spi_write = 0x0038;
@@ -55,7 +54,7 @@ void fsr_read(uint16_t* fsr)
     gpio_put(CS1_GPIO, 0);
     spi_write16_blocking(SPI_PORT, &spi_write, 1);
     spi_read16_blocking(SPI_PORT, 0, &spi_read, 1);
-    *(fsr+9) = spi_read;
+    *(fsr+10) = spi_read;
 
     // Channel 5, ADC 1
     spi_write = 0x3A;
@@ -63,7 +62,7 @@ void fsr_read(uint16_t* fsr)
     gpio_put(CS1_GPIO, 0);
     spi_write16_blocking(SPI_PORT, &spi_write, 1);
     spi_read16_blocking(SPI_PORT, 0, &spi_read, 1);
-    *(fsr+10) = spi_read;
+    *(fsr+11) = spi_read;
 
     // Channel 6, ADC 1
     spi_write = 0x003C;
@@ -71,7 +70,7 @@ void fsr_read(uint16_t* fsr)
     gpio_put(CS1_GPIO, 0);
     spi_write16_blocking(SPI_PORT, &spi_write, 1);
     spi_read16_blocking(SPI_PORT, 0, &spi_read, 1);
-    *(fsr+11) = spi_read;
+    *(fsr+12) = spi_read;
 
     // Channel 7, ADC 1
     spi_write = 0x003E;
@@ -79,7 +78,7 @@ void fsr_read(uint16_t* fsr)
     gpio_put(CS1_GPIO, 0);
     spi_write16_blocking(SPI_PORT, &spi_write, 1);
     spi_read16_blocking(SPI_PORT, 0, &spi_read, 1);
-    *(fsr) = spi_read;
+    *(fsr+1) = spi_read;
     
 
     //Deactivate ADC1 so we can switch to ADC2.
@@ -91,7 +90,7 @@ void fsr_read(uint16_t* fsr)
     gpio_put(CS2_GPIO, 0);
     spi_write16_blocking(SPI_PORT, &spi_write, 1);
     spi_read16_blocking(SPI_PORT, 0, &spi_read, 1);
-    *(fsr+1) = spi_read;
+    *(fsr+2) = spi_read;
 
     // Channel 1, ADC 2
     spi_write = 0x0032;
@@ -99,7 +98,7 @@ void fsr_read(uint16_t* fsr)
     gpio_put(CS2_GPIO, 0);
     spi_write16_blocking(SPI_PORT, &spi_write, 1);
     spi_read16_blocking(SPI_PORT, 0, &spi_read, 1);
-    *(fsr+2) = spi_read;
+    *(fsr+3) = spi_read;
 
     // Channel 2, ADC 2
     spi_write = 0x0034;
@@ -107,7 +106,7 @@ void fsr_read(uint16_t* fsr)
     gpio_put(CS2_GPIO, 0);
     spi_write16_blocking(SPI_PORT, &spi_write, 1);
     spi_read16_blocking(SPI_PORT, 0, &spi_read, 1);
-    *(fsr+3) = spi_read;
+    *(fsr+4) = spi_read;
 
     // Channel 3, ADC 2
     spi_write = 0x0036;
@@ -115,14 +114,51 @@ void fsr_read(uint16_t* fsr)
     gpio_put(CS2_GPIO, 0);
     spi_write16_blocking(SPI_PORT, &spi_write, 1);
     spi_read16_blocking(SPI_PORT, 0, &spi_read, 1);
-    *(fsr+4) = spi_read;
+    *(fsr+5) = spi_read;
+
+    // Channel 6, ADC 2
+    spi_write = 0x003C;
+    gpio_put(CS2_GPIO, 1);
+    gpio_put(CS2_GPIO, 0);
+    spi_write16_blocking(SPI_PORT, &spi_write, 1);
+    spi_read16_blocking(SPI_PORT, 0, &spi_read, 1);
+    *(fsr) = spi_read;
 
     gpio_put(CS1_GPIO, 1);
     gpio_put(CS2_GPIO, 1);
 }
 
 void slider_pot_read(uint16_t* settings) {
-    
+    uint16_t spi_write;
+    uint16_t spi_read;
+
+    gpio_put(CS1_GPIO, 1);
+
+    // Channel 4, ADC 2
+    spi_write = 0x0038;
+    gpio_put(CS2_GPIO, 1);
+    gpio_put(CS2_GPIO, 0);
+    spi_write16_blocking(SPI_PORT, &spi_write, 1);
+    spi_read16_blocking(SPI_PORT, 0, &spi_read, 1);
+    *(settings) = spi_read;
+
+    // Channel 5, ADC 2
+    spi_write = 0x003A;
+    gpio_put(CS2_GPIO, 1);
+    gpio_put(CS2_GPIO, 0);
+    spi_write16_blocking(SPI_PORT, &spi_write, 1);
+    spi_read16_blocking(SPI_PORT, 0, &spi_read, 1);
+    *(settings+1) = spi_read;
+
+    // Channel 7, ADC 2
+    spi_write = 0x003E;
+    gpio_put(CS2_GPIO, 1);
+    gpio_put(CS2_GPIO, 0);
+    spi_write16_blocking(SPI_PORT, &spi_write, 1);
+    spi_read16_blocking(SPI_PORT, 0, &spi_read, 1);
+    *(settings+2) = spi_read;
+
+    gpio_put(CS2_GPIO, 1);
 }
 
 bool vibrato_button_read() {

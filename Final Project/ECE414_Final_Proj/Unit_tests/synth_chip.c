@@ -106,6 +106,10 @@ void play_note(enum Note note, uint8_t channel, uint8_t octave)
         Areg = 0x87;
         Breg = 0x02 + (octave << 2) + 0x20;
         break;
+    case Ch:
+        Areg = 0xAE;
+        Breg = 0x02 + (octave << 2) + 0x20;
+        break;
     }
     set_reg((uint8_t) 0xA0 + (channel), Areg);
     set_reg((uint8_t) 0xB0 + (channel), Breg);
@@ -148,84 +152,46 @@ void init_ch()
         set_reg(0x63+i, 0x73);
         set_reg(0x83+i, 0x77);
     }
-
 }
 
-void scale()
-{
-    enum Note note = C;
-    uint8_t channel = 0x01;
-    uint8_t octave = 0x04;
+void set_attack_decay(uint16_t atk, uint16_t decay) {
+    uint8_t sentVal = 0x00;
+    if (atk > 3200) {
+        sentVal += ((atk/2173) << 4);
+    }
+    if (decay > 3200) {
+       sentVal += (decay/2173);
+    }
+    for (uint8_t i = 0; i < 3; i++) {
+        set_reg(0x60+i, sentVal);
+        set_reg(0x63+i, sentVal);
+    }
+    for (uint8_t i = 8; i < 12; i++) {
+        set_reg(0x60+i, sentVal);
+        set_reg(0x63+i, sentVal);
+    }
+    for (uint8_t i = 16; i < 19; i++) {
+        set_reg(0x60+i, sentVal);
+        set_reg(0x63+i, sentVal);
+    }
+}
 
-    play_note(note, channel, octave-1);
-    busy_wait_ms(1000);
-    note = D;
-    play_note(note, channel, octave);
-    busy_wait_ms(1000);
-    note = E;
-    play_note(note, channel, octave);
-    busy_wait_ms(1000);
-    note = F;
-    play_note(note, channel, octave);
-    busy_wait_ms(1000);
-    note = G;
-    play_note(note, channel, octave);
-    busy_wait_ms(1000);
-    note = A;
-    play_note(note, channel, octave);
-    busy_wait_ms(1000);
-    note = B;
-    play_note(note, channel, octave);
-    busy_wait_ms(1000);
-    note = C;
-    play_note(note, channel, octave);
-    busy_wait_ms(1000);
-    clear_note(channel);
-
-    busy_wait_ms(1000);
-
-    play_note(note, channel, octave-1);
-    note = G;
-    play_note(note, channel+1, octave);
-    note = C;
-    play_note(note, channel+3, octave+1);
-    note = E;
-    play_note(note, channel+4, octave+1);
-    note = As;
-    play_note(note, channel+2, octave+1);
-    busy_wait_ms(1000);
-    clear_note(channel);
-    clear_note(channel+2);
-    busy_wait_ms(2000);
-    clear_note(channel+1);
-    clear_note(channel+3);
-    clear_note(channel+4);
-
-
-    // set_reg(0xA0, 0x98);
-    // set_reg(0xB0, 0x31);
-    // busy_wait_ms(1000);
-    // set_reg(0xA0, 0xCA);
-    // set_reg(0xB0, 0x31);
-    // busy_wait_ms(1000);
-    // set_reg(0xA0, 0x02);
-    // set_reg(0xB0, 0x32);
-    // busy_wait_ms(1000);
-    // set_reg(0xA0, 0x41);
-    // set_reg(0xB0, 0x32);
-    // busy_wait_ms(1000);
-    // set_reg(0xA0, 0x63);
-    // set_reg(0xB0, 0x32);
-    // busy_wait_ms(1000);
-    // set_reg(0xA0, 0xAE);
-    // set_reg(0xB0, 0x32);
-    // busy_wait_ms(1000);
-    // set_reg(0xA0, 0x81);
-    // set_reg(0xB0, 0x35);
-    // busy_wait_ms(1000);
-    // set_reg(0xA0, 0x98);
-    // set_reg(0xB0, 0x35);
-    // busy_wait_ms(1000);
+void set_vibrato(uint16_t intensity) {
+    if (intensity > 11000) {
+        uint8_t sentVal = ((intensity/1440) << 4) + 0x07;
+        for (uint8_t i = 0; i < 3; i++) {
+            set_reg(0x80+i, sentVal);
+            set_reg(0x83+i, sentVal);
+        }
+        for (uint8_t i = 8; i < 12; i++) {
+            set_reg(0x80+i, sentVal);
+            set_reg(0x83+i, sentVal);
+        }
+        for (uint8_t i = 16; i < 19; i++) {
+            set_reg(0x80+i, sentVal);
+            set_reg(0x83+i, sentVal);
+        }
+    }
 }
 
 void synth_init()
